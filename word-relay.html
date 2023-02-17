@@ -29,7 +29,7 @@
           // 제시어가 비어 있는가?
           word = newWord; // 새로 입력한 단어가 제시어가 된다.
           $word.textContent = word; // 화면에 제시어 표시
-          $input.value = '';
+
           const order = Number($order.textContent); // 현재 순서
           if (order + 1 > number) {
             // 현재순서에 1을 더한값이 참가자수보다 큰 경우
@@ -38,21 +38,26 @@
             // 현재순서에 1을 더한값이 참가자수보다 작거나 같은 경우
             $order.textContent = order + 1;
           }
+          $input.value = '';
+          $input.focus();
         } else {
           // 비어 있지 않다.
           if (word[word.length - 1] === newWord[0]) {
             // 입력한 단어가 올바른가?
             word = newWord;
             $word.textContent = word;
-            $input.value = '';
+
             const order = Number($order.textContent); // 현재 순서
             if (order + 1 > number) {
               $order.textContent = 1;
             } else {
               $order.textContent = order + 1;
             }
+            $input.value = '';
+            $input.focus();
           } else {
             // 올바르지 않다.
+            alert('올바르지 않은 단어입니다!');
           }
         }
       };
