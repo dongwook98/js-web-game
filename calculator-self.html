@@ -30,7 +30,7 @@
   <!-- 계산기 버튼 구현 -->
   <body>
     <input readonly id="operator" />
-    <input readonly type="number" id="result" />
+    <input readonly type="text" id="result" />
     <div class="row">
       <button id="num-7">7</button>
       <button id="num-8">8</button>
@@ -108,11 +108,21 @@
         .addEventListener('click', onClickNumber('9'));
 
       const onClickOperator = (op) => () => {
-        if (numOne) {
-          operator = op;
-          $operator.value = op;
+        if (op === '-') {
+          if (numOne) {
+            operator = op;
+            $operator.value = operator;
+          } else {
+            numOne += op;
+            $result.value += op;
+          }
         } else {
-          alert('숫자를 먼저 입력하세요.');
+          if (numOne) {
+            operator = op;
+            $operator.value = operator;
+          } else {
+            alert('숫자를 먼저 입력하세요.');
+          }
         }
       };
       document
