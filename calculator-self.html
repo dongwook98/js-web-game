@@ -108,6 +108,26 @@
         .addEventListener('click', onClickNumber('9'));
 
       const onClickOperator = (op) => () => {
+        if (numTwo) {
+          switch (operator) {
+            case '+':
+              $result.value = parseInt(numOne) + parseInt(numTwo);
+              break;
+            case '-':
+              $result.value = numOne - numTwo;
+              break;
+            case '*':
+              $result.value = numOne - numTwo;
+              break;
+            case '/':
+              $result.value = numOne - numTwo;
+              break;
+            default:
+              break;
+          }
+          numOne = $result.value; // 이전에 계산했던 결과값을 넘버원에 저장
+          numTwo = ''; // 이전에 numTwo에 들어있던 값 초기화
+        }
         if (op === '-') {
           if (numOne) {
             operator = op;
