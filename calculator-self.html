@@ -160,10 +160,10 @@
             $result.value = numOne / numTwo;
           }
           // 연이어 계산하기 기능
-          $operator.value = '';
-          numOne = $result.value;
-          operator = '';
-          numTwo = '';
+          $operator.value = ''; // 화면에 연산자 표시하는거 초기화
+          numOne = $result.value; // 이전에 계산했던 결과값을 넘버원에 저장
+          operator = ''; // 이전에 operator에 들어있던 값 초기화
+          numTwo = ''; // 이전에 numTwo에 들어있던 값 초기화
         } else {
           alert('숫자를 먼저 입력하세요.');
         }
