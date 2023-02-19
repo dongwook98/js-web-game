@@ -30,6 +30,37 @@
       }
       console.log(numbers);
       console.log(answer);
+
+      const tries = [];
+      function checkInput(input) {
+        // 3146, 314
+        if (input.length !== 4) {
+          // 길이가 4가 아닌가
+          return alert('4자리 숫자를 입력해 주세요.');
+        }
+        if (new Set(input).size !== 4) {
+          // 중복된 숫자가 있는가
+          return alert('중복되지 않게 입력해 주세요');
+        }
+        if (tries.includes(input)) {
+          // 이미 시도한 값은 아닌가
+          return alert('이미 시도한 값입니다.');
+        }
+        return true;
+      } // 검사하는 코드
+
+      $form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const value = $input.value;
+        $input.value = '';
+        const valid = checkInput(value);
+        if (valid) {
+          // 입력값 문제없음
+          tries.push(value);
+        } else {
+          //에러 있음
+        }
+      });
     </script>
   </body>
 </html>
