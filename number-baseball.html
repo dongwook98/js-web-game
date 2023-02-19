@@ -27,6 +27,7 @@
         // 네 번 반복
         const index = Math.floor(Math.random() * numbers.length); // 0~numbers의 개수인 랜덤한 정수
         answer.push(numbers[index]);
+        numbers.splice(index, 1);
       }
       console.log(answer);
 
@@ -69,6 +70,26 @@
           $logs.appendChild(message);
           return;
         }
+        // 몇 스트라이크 몇 볼인지 검사
+        let strike = 0;
+        let ball = 0;
+        for (let i = 0; i < answer.length; i++) {
+          const index = value.indexOf(answer[i]);
+          if (index > -1) {
+            // 일치하는 숫자 발견
+            if (index === i) {
+              // 자릿수도 같음
+              strike += 1;
+            } else {
+              // 숫자만 같음
+              ball += 1;
+            }
+          }
+        }
+        $logs.append(
+          `${value}: ${strike} 스트라이크 ${ball} 볼`,
+          document.createElement('br')
+        );
         tries.push(value);
       });
     </script>
