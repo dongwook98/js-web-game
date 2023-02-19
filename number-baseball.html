@@ -52,25 +52,24 @@
         const value = $input.value; // 유저가 input태그에 입력한 값 저장하는 변수
         $input.value = '';
         const valid = checkInput(value); // 유저가 입력한값이 올바른지 아닌지 나타내는 변수
-        if (valid) {
-          // 입력값 올바름
-          if (answer.join('') === value) {
-            // 입력값이 정답을 맞췄다면
-            $logs.textContent = '홈런! 축하드립니다. 게임에서 승리하셨습니다!';
-            return;
-          }
-          if (tries.length >= 9) {
-            // 입력값이 10번이라면
-            const message = document.createTextNode(
-              `패배! 정답은 ${answer.join('')}`
-            );
-            $logs.appendChild(message);
-            return;
-          }
-          tries.push(value);
-        } else {
-          // 입력값이 올바르지 않음
+        if (!valid) {
+          return;
         }
+        // 입력값 올바름
+        if (answer.join('') === value) {
+          // 입력값이 정답을 맞췄다면
+          $logs.textContent = '홈런! 축하드립니다. 게임에서 승리하셨습니다!';
+          return;
+        }
+        if (tries.length >= 9) {
+          // 입력값이 10번이라면
+          const message = document.createTextNode(
+            `패배! 정답은 ${answer.join('')}`
+          );
+          $logs.appendChild(message);
+          return;
+        }
+        tries.push(value);
       });
     </script>
   </body>
