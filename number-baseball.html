@@ -28,12 +28,10 @@
         const index = Math.floor(Math.random() * numbers.length); // 0~numbers의 개수인 랜덤한 정수
         answer.push(numbers[index]);
       }
-      console.log(numbers);
       console.log(answer);
 
-      const tries = [];
+      const tries = []; // 유저가 입력한 값들을 저장하는 배열
       function checkInput(input) {
-        // 3146, 314
         if (input.length !== 4) {
           // 길이가 4가 아닌가
           return alert('4자리 숫자를 입력해 주세요.');
@@ -50,15 +48,28 @@
       } // 검사하는 코드
 
       $form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const value = $input.value;
+        event.preventDefault(); // submit이벤트(새로고침) 막아줌
+        const value = $input.value; // 유저가 input태그에 입력한 값 저장하는 변수
         $input.value = '';
-        const valid = checkInput(value);
+        const valid = checkInput(value); // 유저가 입력한값이 올바른지 아닌지 나타내는 변수
         if (valid) {
-          // 입력값 문제없음
+          // 입력값 올바름
+          if (answer.join('') === value) {
+            // 입력값이 정답을 맞췄다면
+            $logs.textContent = '홈런! 축하드립니다. 게임에서 승리하셨습니다!';
+            return;
+          }
+          if (tries.length >= 9) {
+            // 입력값이 10번이라면
+            const message = document.createTextNode(
+              `패배! 정답은 ${answer.join('')}`
+            );
+            $logs.appendChild(message);
+            return;
+          }
           tries.push(value);
         } else {
-          //에러 있음
+          // 입력값이 올바르지 않음
         }
       });
     </script>
