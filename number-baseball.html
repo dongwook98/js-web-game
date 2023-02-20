@@ -48,11 +48,12 @@
         return true;
       } // 검사하는 코드
 
+      let out = 0;
       $form.addEventListener('submit', (event) => {
         event.preventDefault(); // submit이벤트(새로고침) 막아줌
         const value = $input.value; // 유저가 input태그에 입력한 값 저장하는 변수
         $input.value = '';
-        const valid = checkInput(value); // 유저가 입력한값이 올바른지 아닌지 나타내는 변수
+        const valid = checkInput(value); // 유저가 입력한값의 형식을 체크하는 함수의 값을 저장하는 변수
         if (!valid) {
           return;
         }
@@ -63,6 +64,7 @@
           return;
         }
         if (tries.length >= 9) {
+          // 9인이유? : tries가 9개일때 버튼을누르면 10번시도한거임
           // 10번 시도했다면?
           const message = document.createTextNode(
             `패배! 정답은 ${answer.join('')}`
@@ -71,9 +73,10 @@
           return;
         }
         // 몇 스트라이크 몇 볼인지 검사
-        let strike = 0;
-        let ball = 0;
+        let strike = 0; // 스트라이크 횟수를 저장할 변수생성 및 초기화
+        let ball = 0; // 볼 횟수를 저장할 변수생성 및 초기화
         for (let i = 0; i < answer.length; i++) {
+          // 정답의요소들을
           const index = value.indexOf(answer[i]);
           if (index > -1) {
             // 일치하는 숫자 발견
@@ -86,10 +89,24 @@
             }
           }
         }
-        $logs.append(
-          `${value}: ${strike} 스트라이크 ${ball} 볼`,
-          document.createElement('br')
-        );
+        if (strike === 0 && ball === 0) {
+          // 0볼 0스트라이크일 경우 out 카운트 1 늘림, 몇아웃인지 화면에 표시
+          out++;
+          $logs.append(`${value}:${out}아웃`, document.createElement('br'));
+        } else {
+          // 0볼 0스트라이크 아닐경우 몇볼 몇스트라이크인지 화면에 표시
+          $logs.append(
+            `${value}:${strike} 스트라이크 ${ball}볼`,
+            document.createElement('br')
+          );
+        }
+        if (out === 3) {
+          // 3아웃일 경우
+          $logs.append(
+            document.createTextNode(`패배! 정답은 ${answer.join('')}`)
+          );
+          return;
+        }
         tries.push(value);
       });
     </script>
