@@ -48,6 +48,13 @@
         return true;
       } // 검사하는 코드
 
+      function defeated() {
+        const message = document.createTextNode(
+          `패배! 정답은 ${answer.join('')}`
+        );
+        $logs.appendChild(message);
+      }
+
       let out = 0;
       $form.addEventListener('submit', (event) => {
         event.preventDefault(); // submit이벤트(새로고침) 막아줌
@@ -66,10 +73,7 @@
         if (tries.length >= 9) {
           // 9인이유? : tries가 9개일때 버튼을누르면 10번시도한거임
           // 10번 시도했다면?
-          const message = document.createTextNode(
-            `패배! 정답은 ${answer.join('')}`
-          );
-          $logs.appendChild(message);
+          defeated();
           return;
         }
         // 몇 스트라이크 몇 볼인지 검사
@@ -102,9 +106,7 @@
         }
         if (out === 3) {
           // 3아웃일 경우
-          $logs.append(
-            document.createTextNode(`패배! 정답은 ${answer.join('')}`)
-          );
+          defeated();
           return;
         }
         tries.push(value);
