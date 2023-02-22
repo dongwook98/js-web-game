@@ -64,6 +64,7 @@
       const $operator = document.querySelector('#operator'); // 태그선택은 $로 통일
       const $result = document.querySelector('#result');
 
+      // 숫자 버튼 기능 구현
       const onClickNumber = (number) => (event) => {
         if (!operator) {
           // 연산자가 없는 경우
@@ -78,7 +79,7 @@
         } 
         numTwo += number; // 숫자2에 데이터 넣어주기
         $result.value += number; // 화면에 데이터 표시하기
-        } // 고차 함수(high order function)로 중복 제거하기
+        } // 고차 함수(high order function)로 중복 제거하기 , 이벤트객체로도 중복제거가능 event.target.value , 중첩 if문 제거함
       document
         .querySelector('#num-0')
         .addEventListener('click', onClickNumber('0'));
@@ -110,6 +111,7 @@
         .querySelector('#num-9')
         .addEventListener('click', onClickNumber('9'));
 
+      // 연산자버튼 기능 구현
       const onClickOperator = (op) => () => {
         if (numOne) {
           operator = op;
@@ -130,6 +132,8 @@
       document
         .querySelector('#multiply')
         .addEventListener('click', onClickOperator('*'));
+
+      // = 버튼 기능구현  
       document.querySelector('#calculate').addEventListener('click', () => {
         if (numTwo) {
           // numTwo 가 있는경우
@@ -138,13 +142,13 @@
           //       $result.value = parseInt(numOne) + parseInt(numTwo);
           //       break;
           //     case '-':
-          //       $result.value = numone - numTwo
+          //       $result.value = numOne - numTwo
           //       break;
           //     case '*':
-          //       $result.value = numone - numTwo
+          //       $result.value = numOne - numTwo
           //       break;
           //     case '/':
-          //       $result.value = numone - numTwo
+          //       $result.value = numOne - numTwo
           //       break;
           //     default:
           //       break;
@@ -154,7 +158,7 @@
           // }
 
           if (operator === '+') {
-            $result.value = parseInt(numOne) + parseInt(numTwo);
+            $result.value = parseInt(numOne) + parseInt(numTwo); // 형변환때문에 문자열 더하기는 숫자로 바꾼 후 해야함  
           } else if (operator === '-') {
             $result.value = numOne - numTwo;
           } else if (operator === '*') {
@@ -166,6 +170,8 @@
           alert('숫자를 먼저 입력하세요.');
         }
       });
+
+      //초기화 버튼 기능구현
       document.querySelector('#clear').addEventListener('click', () => {
         numOne = '';
         operator = '';
