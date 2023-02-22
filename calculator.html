@@ -4,8 +4,9 @@
   <title>계산기</title>
   <style>
     * {
-      box-sizing: border-box;
+      box-sizing: border-box; 
     }
+    /* 테두리까지 포함해서 너비와높이 계산하는 코드 (마진은 너비와높이에 포함안된다.)*/
     #result {
       width: 180px;
       height: 50px;
@@ -31,6 +32,7 @@
   <body>
     <input readonly id="operator" />
     <input readonly type="number" id="result" />
+    <!-- readonly 사용자가 글자를 쓰지못하게 하는 속성 -->
     <div class="row">
       <button id="num-7">7</button>
       <button id="num-8">8</button>
@@ -56,26 +58,27 @@
       <button id="multiply">x</button>
     </div>
     <script>
-      let numOne = '';
-      let operator = '';
-      let numTwo = '';
-      const $operator = document.querySelector('#operator');
+      let numOne = ''; // 숫자 1 저장할 변수
+      let operator = ''; // 연산자를 저장할 변수
+      let numTwo = ''; // 숫자 2 저장할 변수
+      const $operator = document.querySelector('#operator'); // 태그선택은 $로 통일
       const $result = document.querySelector('#result');
 
       const onClickNumber = (number) => (event) => {
-        if (operator) {
-          // 연산자가 비어있지 않다.
-          if (!numTwo) {
-            // numTwo가 비어있는 경우
-            $result.value = '';
-          }
-          numTwo += number;
-        } else {
-          // 비어있다.
-          numOne += number;
-        }
-        $result.value += number;
-      }; // 고차 함수 (high order function)
+        if (!operator) {
+          // 연산자가 없는 경우
+          numOne += number; // 숫자1에 데이터 넣어주기
+          $result.value += number; // 화면에 데이터 표시하기
+          return
+        }  
+        // 이 아래로 operator가 존재하는 경우에만 실행된다.
+        if (!numTwo) {
+          // numTwo가 비어있는 경우
+          $result.value = '';
+        } 
+        numTwo += number; // 숫자2에 데이터 넣어주기
+        $result.value += number; // 화면에 데이터 표시하기
+        } // 고차 함수(high order function)로 중복 제거하기
       document
         .querySelector('#num-0')
         .addEventListener('click', onClickNumber('0'));
@@ -114,7 +117,7 @@
         } else {
           alert('숫자를 먼저 입력하세요.');
         }
-      };
+      }; // 고차함수로 함수의 중복 제거
       document
         .querySelector('#plus')
         .addEventListener('click', onClickOperator('+'));
