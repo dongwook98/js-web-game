@@ -1,0 +1,66 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>가위바위보</title>
+  <style>
+    #computer {
+      width: 142px;
+      height: 200px;
+    }
+  </style>
+</head>
+
+<body>
+<div id="computer"></div>
+<div>
+  <button id="scissors" class="btn">가위</button>
+  <button id="rock" class="btn">바위</button>
+  <button id="paper" class="btn">보</button>
+</div>
+<div id="score">0</div>
+<script>
+  const $computer = document.querySelector('#computer');
+  const $score = document.querySelector('#score');
+  const $rock = document.querySelector('#rock');
+  const $scissors = document.querySelector('#scissors');
+  const $paper = document.querySelector('#paper');
+  const IMG_URL = './rsp.png';
+  $computer.style.background = `url(${IMG_URL}) 0 0`; // 0, 0 : 가로 위치, 세로 위치
+  $computer.style.backgroundSize = 'auto 200px'; // auto : 높이 200px에 맞춰서 알아서 맞춰줌 // auto, 200px : 가로 너비, 세로 너비 
+
+  const rspX = {
+    scissors: '0', // 가위
+    rock: '-220px', // 바위
+    paper: '-440px', // 보
+  }
+
+  let computerChoice = 'scissors'
+
+  const changeComputerHand = () => {
+    if(computerChoice === 'scissors') { // 가위면
+      computerChoice = 'rock'; // 항상 데이터와 화면을 동시에 바꿔줘야한다.
+    } else if (computerChoice === 'rock') { // 바위면
+      computerChoice = 'paper';
+    } else if (computerChoice === 'paper'){ // 보자기면
+      computerChoice = 'scissors';
+    }
+    $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+    $computer.style.backgroundSize = 'auto 200px'; 
+    // background와 backgroundSize는 세트로 다녀야한다. backgroundSize를 안적어주면 리셋되버린다. 
+  }
+  let intervalId = setInterval(changeComputerHand, 50);
+
+  // clickButton 5번 호출, 1번인터벌, 2번, 3번, 4번, 5번(얘만 intervalId) 
+  // 그 다음에 버튼을 클릭하면 5번만 취소
+  const clickButton = () => {
+    clearInterval(intervalId);
+    // 점수 계산 및 화면 표시
+    setTimeout(() => {
+      clearInterval(intervalId);
+      intervalId = setInterval(changeComputerHand, 50); //타이머마다 아이디가 달라지므로 다시 재할당
+    }, 1000);
+  };
+  $rock.addEventListener('click', clickButton);
+  $scissors.addEventListener('click', clickButton);
+  $paper.addEventListener('click', clickButton);
+</script>
