@@ -56,7 +56,8 @@
     clearInterval(intervalId);
     // 점수 계산 및 화면 표시
     setTimeout(() => {
-      clearInterval(intervalId);
+      clearInterval(intervalId); 
+      // 연달아 버튼클릭시 그림 바꾸는 속도가 점점 빨라지고 몇초 후에 다시 버튼을 누르면 그림이 안돌아가는 버그 발생 해결
       intervalId = setInterval(changeComputerHand, 50); //타이머마다 아이디가 달라지므로 다시 재할당
     }, 1000);
   };
