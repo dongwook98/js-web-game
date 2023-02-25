@@ -50,8 +50,15 @@
   }
   let intervalId = setInterval(changeComputerHand, 50);
 
+  const scoreTable = {
+    rock: 0,
+    scissors: 1,
+    paper: -1,
+  };
+
   let clickable = true;
-  const clickButton = () => {
+  let score = 0;
+  const clickButton = (event) => {
     if(clickable) {
       clearInterval(intervalId);
       clickable = false;
@@ -61,37 +68,22 @@
       : event.target.textContent === '가위'
         ? 'scissors' 
         : 'paper'; 
-      if(myChoice === 'rock') {
-        if(computerChoice === 'rock') {
-          console.log('무승부');
-        } else if (computerChoice === 'scissors') {
-          console.log('승리');
-        } else if (computerChoice === 'paper') {
-          console.log('패배');
-        }
-       } else if (myChoice === 'scissors') {
-        if(computerChoice === 'rock') {
-          console.log('패배');
-        } else if (computerChoice === 'scissors') {
-          console.log('무승부');
-        } else if (computerChoice === 'paper') {
-          console.log('승리');
-        }
-       } else if (myChoice === 'paper') {
-        if(computerChoice === 'rock') {
-          console.log('승리');
-        } else if (computerChoice === 'scissors') {
-          console.log('패배');
-        } else if (computerChoice === 'paper') {
-          console.log('무승부');
-        }
-       }
+      const myScore = scoreTable[myChoice];
+      const computerScore = scoreTable[computerChoice];
+      const diff = myScore - computerScore;
+      if(diff === 2 || diff === -1) {
+        console.log('승리');
+      } else if (diff === -2 || diff === 1) {
+        console.log('패배');
+      } else {
+        console.log('무승부');
+      }
       setTimeout(() => {
         clickable = true;
         intervalId = setInterval(changeComputerHand, 50);
       }, 1000);
     }
-  };
+  }; 
   $rock.addEventListener('click', clickButton);
   $scissors.addEventListener('click', clickButton);
   $paper.addEventListener('click', clickButton);
