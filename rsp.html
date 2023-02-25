@@ -50,26 +50,43 @@
   }
   let intervalId = setInterval(changeComputerHand, 50);
 
-  // clickButton 5번 호출, 1번인터벌, 2번, 3번, 4번, 5번(얘만 intervalId에 저장) 
-  // 그 다음에 버튼을 클릭하면 5번만 취소 
+  let clickable = true;
   const clickButton = () => {
-    clearInterval(intervalId);
-    // 클릭한다음 1초동안 버튼클릭이벤트제거
-    $rock.removeEventListener('click', clickButton);
-    $scissors.removeEventListener('click', clickButton);
-    $paper.removeEventListener('click', clickButton);
-    // 점수 계산 및 화면 표시
-    setTimeout(() => { // 클릭 한 다음 1초후에 실행 된다. 코드중복이아님(실행시간이 다르므로)
-      clearInterval(intervalId); // 혹시나 직전 인터벌이 있으면 한번 더 제거
-      // 연달아 버튼클릭시 그림 바꾸는 속도가 점점 빨라지고 몇초 후에 다시 버튼을 누르면 그림이 안돌아가는 버그 발생 해결
-      intervalId = setInterval(changeComputerHand, 50); //타이머마다 아이디가 달라지므로 다시 재할당
-      // 1초후에 버튼클릭이벤트추가
-      $rock.addEventListener('click', clickButton);
-      $scissors.addEventListener('click', clickButton);
-      $paper.addEventListener('click', clickButton);
-    }, 1000);
+    if(clickable) {
+      clearInterval(intervalId);
+      clickable = false;
+
+      setTimeout(() => {
+        clickable = true;
+        intervalId = setInterval(changeComputerHand, 50);
+      }, 1000);
+    }
   };
   $rock.addEventListener('click', clickButton);
   $scissors.addEventListener('click', clickButton);
   $paper.addEventListener('click', clickButton);
+
+
+  // clickButton 5번 호출, 1번인터벌, 2번, 3번, 4번, 5번(얘만 intervalId에 저장) 
+  // 그 다음에 버튼을 클릭하면 5번만 취소 
+  // const clickButton = () => {
+  //   clearInterval(intervalId);
+  //   // 클릭한다음 1초동안 버튼클릭이벤트제거
+  //   $rock.removeEventListener('click', clickButton);
+  //   $scissors.removeEventListener('click', clickButton);
+  //   $paper.removeEventListener('click', clickButton);
+  //   // 점수 계산 및 화면 표시
+  //   setTimeout(() => { // 클릭 한 다음 1초후에 실행 된다. 코드중복이아님(실행시간이 다르므로)
+  //     clearInterval(intervalId); // 혹시나 직전 인터벌이 있으면 한번 더 제거
+  //     // 연달아 버튼클릭시 그림 바꾸는 속도가 점점 빨라지고 몇초 후에 다시 버튼을 누르면 그림이 안돌아가는 버그 발생 해결
+  //     intervalId = setInterval(changeComputerHand, 50); //타이머마다 아이디가 달라지므로 다시 재할당
+  //     // 1초후에 버튼클릭이벤트추가
+  //     $rock.addEventListener('click', clickButton);
+  //     $scissors.addEventListener('click', clickButton);
+  //     $paper.addEventListener('click', clickButton);
+  //   }, 1000);
+  // };
+  // $rock.addEventListener('click', clickButton);
+  // $scissors.addEventListener('click', clickButton);
+  // $paper.addEventListener('click', clickButton);
 </script>
