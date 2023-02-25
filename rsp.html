@@ -71,13 +71,19 @@
       const myScore = scoreTable[myChoice];
       const computerScore = scoreTable[computerChoice];
       const diff = myScore - computerScore;
-      if(diff === 2 || diff === -1) {
-        console.log('승리');
-      } else if (diff === -2 || diff === 1) {
-        console.log('패배');
+      
+      let message;
+      // 2, -1은 승리조건이고, -2, 1은 패배조건, 점수표 참고
+      if ([2, -1].includes(diff)) {
+        score += 1;
+        message = '승리';
+      } else if ([-2, 1].includes(diff)) {
+        score -= 1;
+        message = '패배';
       } else {
-        console.log('무승부');
+        message = '무승부';
       }
+      $score.textContent = `${message} 총: ${score}점`;
       setTimeout(() => {
         clickable = true;
         intervalId = setInterval(changeComputerHand, 50);
