@@ -79,7 +79,7 @@
         me += 1;
         message = '승리';
       } else if ([-2, 1].includes(diff)) {
-        computer -= 1;
+        computer += 1;
         message = '패배';
       } else {
         message = '무승부';
@@ -89,7 +89,8 @@
       } else if (computer >= 3) {
         $score.textContent = `컴퓨터의 승리 ${me}:${computer}`;
       } else {
-        $score.textContent = `${message} ${me}:${computer}`
+        $score.textContent = `${message} 나의 점수:${me}, 
+        컴퓨터의 점수:${computer}`
         setTimeout(() => {
         clickable = true;
         intervalId = setInterval(changeComputerHand, 50);
