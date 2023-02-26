@@ -31,9 +31,9 @@
   const $screen = document.querySelector('#screen');
   const $result = document.querySelector('#result');
 
-  let startTime;
+  let startTime; 
   let endTime;
-  const records = [];
+  const records = []; // 반응속도
 
   $screen.addEventListener('click', (event) => {
     if (event.target.classList.contains('waiting')) { // 대기 화면
