@@ -40,6 +40,20 @@
   const $table = document.createElement('table');
   const $result = document.createElement('div');
   const rows = []; // 행(가로, 줄)
+  let turn = 'O';
+
+  const callback = (event) => {
+    if(event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
+      console.log('빈칸이 아닙니다.');
+      return;
+    } 
+    // 빈 칸이면?
+    console.log('빈칸입니다');
+    event.target.textContent = turn;
+    turn = turn === 'X' ? 'O' : 'X';
+    
+  }
+  
   
   for(let i = 0 ; i < 3; i++) {
     // createElement를 한번 만들면 한번밖에 못씀 (주의)
@@ -47,6 +61,7 @@
     const cells = []; // 데이터 3개 만들어줌 반복문 돌 때 마다 새로운 배열이 생성되는 거임 (중요)
     for(let j = 0; j < 3; j++) {
       const $td = document.createElement('td'); // 반복문안에 넣어서 9번 td 태그 생성
+      $td.addEventListener('click', callback); // 각각의 td들한테 이벤트 추가
       cells.push($td); // html 태그를 배열에 넣어줌! 나중에 .textContent로 가져오면 되기 때문에 좋은 방법!
       // j==0, cells == [td, td, td]
       // j==1, cells == [td, td, td]
