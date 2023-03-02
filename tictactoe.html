@@ -36,24 +36,30 @@
   </tr>
   </table> -->
 <script>
-  const data = [];
-  for(let i = 0; i < 3; i++) {
-    data.push([]);
-  }
-  
+  const { body } = document; // 구조분해할당
   const $table = document.createElement('table');
-  for(let i = 0; i < 3; i++) {
-    const $tr = document.createElement('tr');
-    $table.append($tr);
-    for(let i = 0; i < 3; i++) {
-      $tr.append(document.createElement('td'));
+  const $result = document.createElement('div');
+  const rows = []; // 행(가로, 줄)
+  
+  for(let i = 0 ; i < 3; i++) {
+    // createElement를 한번 만들면 한번밖에 못씀 (주의)
+    const $tr = document.createElement('tr'); // 반복문안에 넣어서 3번 tr 태그 생성
+    const cells = []; // 데이터 3개 만들어줌 반복문 돌 때 마다 새로운 배열이 생성되는 거임 (중요)
+    for(let j = 0; j < 3; j++) {
+      const $td = document.createElement('td'); // 반복문안에 넣어서 9번 td 태그 생성
+      cells.push($td); // html 태그를 배열에 넣어줌! 나중에 .textContent로 가져오면 되기 때문에 좋은 방법!
+      // j==0, cells == [td, td, td]
+      // j==1, cells == [td, td, td]
+      // j==2, cells == [td, td, td]
+      // 각각의 cells는 다른 배열임
+      $tr.append($td); // tr태그에 td태그 9번 넣어줌
     }
-    
+    rows.push(cells); // cells 데이터 3개를 rows 에 넣으면 우리가 원하는 이차원배열 데이터 구조 완성
+    $table.append($tr); // tableㅌ태그에 tr태그 3번 넣어줌
   }
-  // i==0,j==0 $tr.append
-  // i==0,j==1 $tr.append
-  // i==0,j==2 $tr.append
-  // i==0,$table.append($tr)
-  document.body.append($table);
+
+  body.append($table);
+  body.append($result);
+  console.log(rows);
 </script>
 </body>
