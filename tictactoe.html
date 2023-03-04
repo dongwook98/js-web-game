@@ -49,8 +49,8 @@
   // ]
 
   const checkWinner = (target) => {
-    let rowIndex;
-    let cellIndex;
+    const rowIndex = target.parentNode.rowIndex; // tr태그는 rowIndex를 자체적으로 가지고있음
+    const cellIndex = target.cellIndex; // td태그는 cellIndex를 자체적으로 가지고있음
     rows.forEach((row, ri) => {
       row.forEach((cell, ci) => {
         if(cell === target) {
@@ -109,19 +109,12 @@
     // 승자가 있으면
     if (hasWinner) {
       $result.textContent = `${turn}님이 승리!`
-      $table.removeEventListener('click', callback);
+      $table.removeEventListener('click', callback); // 승리 이후에도 클릭안되게 이벤트 제거
       return;
     }
     // 승자가 없으면
     // 무승부 검사
-    let draw = true;
-    rows.forEach((row) => {
-      row.forEach((cell) => {
-        if (!cell.textContent) {
-          draw = false;
-        }
-      });
-    });
+    const draw = rows.flat().every((cell) => cell.textContent);
     if (draw) {
       $result.textContent =`무승부`;
       return;
