@@ -51,16 +51,9 @@
   const checkWinner = (target) => {
     const rowIndex = target.parentNode.rowIndex; // tr태그는 rowIndex를 자체적으로 가지고있음
     const cellIndex = target.cellIndex; // td태그는 cellIndex를 자체적으로 가지고있음
-    rows.forEach((row, ri) => {
-      row.forEach((cell, ci) => {
-        if(cell === target) {
-          rowIndex = ri;
-          cellIndex = ci;
-        }
-      });
-    });
-    // 세 칸 다 채워졌나?
-    let hasWinner = false;
+    
+    
+    let hasWinner = false; // 세칸 다 채워졌나?
     // 가로줄 검사
     if(
       rows[rowIndex][0].textContent === turn &&
