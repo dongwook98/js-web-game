@@ -15,10 +15,10 @@
     <button>입력</button>
 
     <script>
-      const number = parseInt(prompt('몇 명이 참가하나요?'), 10); // 몇 명 참가하는지를 변수에 저장
+      const number = parseInt(prompt('몇 명이 참가하나요?'), 10); // 참가자 수
       const $input = document.querySelector('input');
       const $button = document.querySelector('button');
-      const yesOrNo = confirm('맞나요?');
+      // const yesOrNo = confirm('맞나요?'); // confirm()은 true, false 값 받을 수 있다.
       const $word = document.querySelector('#word');
       const $order = document.querySelector('#order');
       let word; // 제시어를 저장할 변수
