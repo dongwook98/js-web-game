@@ -16,7 +16,6 @@
     <div id="result"></div>
     <script>
       const number = Number(prompt('몇 명이 참가하나요?'));
-      console.log('number', number);
       const $input = document.querySelector('input');
       const $button = document.querySelector('button');
       const $word = document.querySelector('#word');
@@ -34,6 +33,12 @@
           // 제시어가 비어있다면
           word = newWord;
           $word.textContent = word;
+          const order = Number($order.textContent);
+          if (order + 1 > number) {
+            $order.textContent = 1;
+          } else {
+            $order.textContent = order + 1;
+          }
         } else {
           if (word[word.length - 1] === newWord[0]) {
             // 올바른 단어일 경우
@@ -47,7 +52,7 @@
             }
           } else {
             // 올바른 단어가 아닐 경우
-            $result.textContent = '땡 틀렸습니다!';
+            alert('올바르지 않은 단어입니다!');
           }
         }
         $input.value = '';
