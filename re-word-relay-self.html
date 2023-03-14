@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>끝말잇기</title>
+    <title>꿍꿍따</title>
     <style></style>
   </head>
 
@@ -32,7 +32,10 @@
         };
 
         const onClick = () => {
-          if (!word || word[word.length - 1] === newWord[0]) {
+          if (
+            newWord.length === 3 &&
+            (!word || word[word.length - 1] === newWord[0])
+          ) {
             // 제시어가 비어있다면
             word = newWord;
             $word.textContent = word;
