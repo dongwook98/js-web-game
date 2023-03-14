@@ -34,12 +34,17 @@
           // 제시어가 비어있다면
           word = newWord;
           $word.textContent = word;
-          const order = Number($order.textContent);
         } else {
           if (word[word.length - 1] === newWord[0]) {
             // 올바른 단어일 경우
             word = newWord;
             $word.textContent = word;
+            const order = Number($order.textContent);
+            if (order + 1 > number) {
+              $order.textContent = 1;
+            } else {
+              $order.textContent = order + 1;
+            }
           } else {
             // 올바른 단어가 아닐 경우
             $result.textContent = '땡 틀렸습니다!';
