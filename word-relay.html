@@ -23,7 +23,7 @@
       const $result = document.querySelector('#result');
       const $order = document.querySelector('#order');
       let word; // 제시어를 저장할 변수
-      let newWord; //
+      let newWord; // 전역변수로 지정해놔야 OnClick 함수에도 접근가능
 
       const onInput = (event) => {
         newWord = event.target.value;
