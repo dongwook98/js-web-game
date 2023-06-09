@@ -9,18 +9,20 @@
   </head>
 
   <body>
+    <h1 id="number"></h1>
     <div><span id="order">1</span>번째 참가자</div>
     <div>제시어 : <span id="word"></span></div>
     <input type="text" />
     <button>입력</button>
 
     <script>
-      const number = parseInt(prompt('몇 명이 참가하나요?'), 10); // 참가자 수
+      let number = NaN;
       const $input = document.querySelector('input');
       const $button = document.querySelector('button');
-      // const yesOrNo = confirm('맞나요?'); // confirm()은 true, false 값 받을 수 있다.
+      // const yesOrNo = confirm('맞나요?');
       const $word = document.querySelector('#word');
       const $order = document.querySelector('#order');
+      const $number = document.querySelector('#number');
       let word; // 제시어를 저장할 변수
       let newWord; // 새로 입력한 단어를 저장할 변수
 
@@ -51,9 +53,18 @@
         newWord = event.target.value; // 인풋에 입력한 값을 새로 입력한 단어에 저장
       };
 
-      alert(`${number}명 참가했습니다.`); // 몇 명이 참가했는지 나타내준다.
+      while (isNaN(number)) {
+        const promptNumber = prompt('몇 명이 참가하나요?');
+        number = parseInt(promptNumber, 10);
+
+        if (isNaN(number)) {
+          alert('숫자만 입력해주세요.');
+        }
+      }
+
       $input.addEventListener('input', onInput);
       $button.addEventListener('click', onClickButton);
+      $number.textContent = `${number}명 참가합니다.`;
     </script>
   </body>
 </html>
