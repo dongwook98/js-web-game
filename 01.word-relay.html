@@ -9,22 +9,86 @@
   </head>
 
   <body>
-    <h1 id="number"></h1>
-    <div><span id="order">1</span>번째 참가자</div>
-    <div>제시어 : <span id="word"></span></div>
-    <input type="text" />
-    <button>입력</button>
+    <h1 style="text-align: center">끝말잇기 게임</h1>
+
+    <div
+      id="view"
+      style="
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        visibility: hidden;
+      "
+    >
+      <h2>끝말잇기 게임에 오신것을 환영합니다.</h2>
+      <h3>제시어의 마지막 글자가 입력할 단어의 첫번째 글자가 됩니다.</h3>
+      <h3>
+        참가자는 총 <span id="number" style="color: blueviolet"></span>명
+        입니다.
+      </h3>
+      <div style="padding: 20px; font-size: 1.5rem">
+        <span id="order" style="color: cadetblue">1</span>번 참가자의
+        차례입니다.
+      </div>
+      <div style="font-size: 2rem">
+        이번 제시어는
+        <span id="word" style="color: cornflowerblue">〇〇〇</span> 입니다.
+      </div>
+      <div style="display: flex; margin: 10px">
+        <form>
+          <input
+            type="text"
+            style="
+              font-size: 2rem;
+              margin-right: 10px;
+              width: 320px;
+              height: 50px;
+              box-sizing: border-box;
+              border: none;
+              border-bottom: 1px solid red;
+            "
+          />
+          <button
+            style="
+              vertical-align: 7px;
+              width: 50px;
+              height: 50px;
+              background-color: coral;
+              border-radius: 4px;
+              border: none;
+              color: white;
+            "
+          >
+            입력
+          </button>
+        </form>
+      </div>
+    </div>
 
     <script>
-      let number = NaN;
+      let number = Number(prompt('몇 명이 참가하시나요?')); // 참가자 수를 저장할 변수
+      // prompt에 숫자를 입력안하면 다시 입력하라고 해야함
+      // 마이너스 숫자입력도 방지
+      if (number > 0) {
+        // 게임 시작
+        document.querySelector('#view').style.visibility = 'visible';
+      } else {
+        // 숫자입력안하거나 마이너스 숫자를 입력시
+        alert('숫자만 입력해주세요. \n새로고침해서 다시 시작해주세요.');
+      }
       const $input = document.querySelector('input');
       const $button = document.querySelector('button');
-      // const yesOrNo = confirm('맞나요?');
       const $word = document.querySelector('#word');
       const $order = document.querySelector('#order');
       const $number = document.querySelector('#number');
+      const $form = document.querySelector('form');
       let word; // 제시어를 저장할 변수
       let newWord; // 새로 입력한 단어를 저장할 변수
+
+      $form.addEventListener('submit', (e) => {
+        e.preventDefault();
+      });
 
       const onClickButton = () => {
         if (!word || word[word.length - 1] === newWord[0]) {
@@ -53,18 +117,12 @@
         newWord = event.target.value; // 인풋에 입력한 값을 새로 입력한 단어에 저장
       };
 
-      while (isNaN(number)) {
-        const promptNumber = prompt('몇 명이 참가하나요?');
-        number = parseInt(promptNumber, 10);
-
-        if (isNaN(number)) {
-          alert('숫자만 입력해주세요.');
-        }
-      }
-
+      // 이벤트 리스너 설정
       $input.addEventListener('input', onInput);
       $button.addEventListener('click', onClickButton);
-      $number.textContent = `${number}명 참가합니다.`;
+
+      // 게임시작시 나오는 텍스트
+      $number.textContent = `${number}`;
     </script>
   </body>
 </html>
