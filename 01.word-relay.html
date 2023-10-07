@@ -60,53 +60,58 @@
 
   <script>
     const number = Number(prompt('몇 명이 참가하시나요?')); // 참가자 수를 저장할 변수
-    const $input = document.querySelector('input');
-    const $button = document.querySelector('button');
-    const $word = document.querySelector('#word');
-    const $order = document.querySelector('#order');
-    const $number = document.querySelector('#number');
-    const $form = document.querySelector('form');
-    let word; // 제시어
-    let newWord; // 현재 단어
 
-    if (number > 0) { // prompt에 음수를 입력하거나 숫자가아닌 값을 넣으면 다시하라고 경고!
+    if (number > 0) { // 음수 입력 방지
+      const $input = document.querySelector('input');
+      const $button = document.querySelector('button');
+      const $word = document.querySelector('#word');
+      const $order = document.querySelector('#order');
+      const $number = document.querySelector('#number');
+      const $form = document.querySelector('form');
+      let word; // 제시어
+      let newWord; // 현재 단어
+
       document.querySelector('#view').style.visibility = 'visible';
-    } else { // 숫자입력안하거나 마이너스 숫자를 입력시
-      alert('숫자만 입력해주세요. \n새로고침해서 다시 시작해주세요.');
-    }
-    $number.textContent = `${number}`;
+      $number.textContent = `${number}`;
 
-    // word == undefined == false
-    // !word == true
-    // 제시어가 있으면 !word는 false가 된다. 
-    // 제시어가 없으면 !word는 true가 된다.
-    const onClickButton = () => {
-      if (!word || word[word.length - 1] === newWord[0]) { // 제시어가 비어 있거나 입력한 단어가 올바른가?
-        word = newWord;
-        $word.textContent = word;
-        const order = Number($order.textContent);
-        if (order + 1 > number) { // 3번참가자의 순서일 경우 다음순서가 1번으로 가야한다.
-          $order.textContent = 1;
-        } else {
-          $order.textContent = order + 1;
+      // 제시어가 있으면 !word는 false가 된다. 
+      // 제시어가 없으면 !word는 true가 된다.
+      const onClickButton = () => {
+        if (!word || word[word.length - 1] === newWord[0]) { // 제시어가 비어 있거나 입력한 단어가 올바른가?
+          word = newWord;
+          $word.textContent = word;
+          const order = Number($order.textContent);
+          if (order + 1 > number) { // 마지막 참가자의 순서일 경우 다음순서가 1번으로 가야한다.
+            $order.textContent = 1;
+          } else {
+            $order.textContent = order + 1;
+          }
+        } else { // 제시어가 올바르지 않은 경우
+          alert('올바르지 않은 단어입니다!');
         }
-      } else { // 제시어가 올바르지 않은 경우
-        alert('올바르지 않은 단어입니다!');
+        $input.value = '';
+        $input.focus();
+      };
+
+      const onInput = (e) => {
+        newWord = e.target.value;
+      };
+
+      // 이벤트 리스너 설정
+      $input.addEventListener('input', onInput);
+      $button.addEventListener('click', onClickButton);
+      $form.addEventListener('submit', (e) => {
+        e.preventDefault();
+      });
+    } else { // prompt 취소 누르면 null 반환
+      if (number === 0) { // Number(null) === 0
+        alert('0을 입력하셨거나 취소를 누르셨군요. \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요!!')
+      } else {
+        alert('숫자(양수)만 입력해주세요! \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요 :)');
+        document.querySelector('#refresh').style.display = 'block'
       }
-      $input.value = '';
-      $input.focus();
-    };
+    }
 
-    const onInput = (event) => {
-      newWord = event.target.value;
-    };
-
-    // 이벤트 리스너 설정
-    $input.addEventListener('input', onInput);
-    $button.addEventListener('click', onClickButton);
-    $form.addEventListener('submit', (e) => {
-      e.preventDefault();
-    });
   </script>
 </body>
 
