@@ -1,45 +1,40 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>끝말잇기</title>
-    <style></style>
-  </head>
 
-  <body>
-    <h1 style="text-align: center">끝말잇기 게임</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>끝말잇기</title>
+  <style></style>
+</head>
 
-    <div
-      id="view"
-      style="
+<body>
+  <h1 style="text-align: center">끝말잇기 게임</h1>
+  <div id="view" style="
         display: flex;
         flex-flow: column;
         justify-content: center;
         align-items: center;
         visibility: hidden;
-      "
-    >
-      <h2>끝말잇기 게임에 오신것을 환영합니다.</h2>
-      <h3>제시어의 마지막 글자가 입력할 단어의 첫번째 글자가 됩니다.</h3>
-      <h3>
-        참가자는 총 <span id="number" style="color: blueviolet"></span>명
-        입니다.
-      </h3>
-      <div style="padding: 20px; font-size: 1.5rem">
-        <span id="order" style="color: cadetblue">1</span>번 참가자의
-        차례입니다.
-      </div>
-      <div style="font-size: 2rem">
-        이번 제시어는
-        <span id="word" style="color: cornflowerblue">〇〇〇</span> 입니다.
-      </div>
-      <div style="display: flex; margin: 10px">
-        <form>
-          <input
-            type="text"
-            style="
+      ">
+    <h2>끝말잇기 게임에 오신것을 환영합니다.</h2>
+    <h3>제시어의 마지막 글자가 입력할 단어의 첫번째 글자가 됩니다.</h3>
+    <h3>
+      참가자는 총 <span id="number" style="color: blueviolet"></span>명
+      입니다.
+    </h3>
+    <div style="padding: 20px; font-size: 1.5rem">
+      <span id="order" style="color: cadetblue">1</span>번 참가자의
+      차례입니다.
+    </div>
+    <div style="font-size: 2rem">
+      이번 제시어는
+      <span id="word" style="color: cornflowerblue">〇〇〇</span> 입니다.
+    </div>
+    <div style="display: flex; margin: 10px">
+      <form>
+        <input type="text" style="
               font-size: 2rem;
               margin-right: 10px;
               width: 320px;
@@ -47,10 +42,8 @@
               box-sizing: border-box;
               border: none;
               border-bottom: 1px solid red;
-            "
-          />
-          <button
-            style="
+            " />
+        <button style="
               vertical-align: 7px;
               width: 50px;
               height: 50px;
@@ -58,71 +51,59 @@
               border-radius: 4px;
               border: none;
               color: white;
-            "
-          >
-            입력
-          </button>
-        </form>
-      </div>
+            ">
+          입력
+        </button>
+      </form>
     </div>
+  </div>
 
-    <script>
-      let number = Number(prompt('몇 명이 참가하시나요?')); // 참가자 수를 저장할 변수
-      // prompt에 숫자를 입력안하면 다시 입력하라고 해야함
-      // 마이너스 숫자입력도 방지
-      if (number > 0) {
-        // 게임 시작
-        document.querySelector('#view').style.visibility = 'visible';
-      } else {
-        // 숫자입력안하거나 마이너스 숫자를 입력시
-        alert('숫자만 입력해주세요. \n새로고침해서 다시 시작해주세요.');
-      }
-      const $input = document.querySelector('input');
-      const $button = document.querySelector('button');
-      const $word = document.querySelector('#word');
-      const $order = document.querySelector('#order');
-      const $number = document.querySelector('#number');
-      const $form = document.querySelector('form');
-      let word; // 제시어를 저장할 변수
-      let newWord; // 새로 입력한 단어를 저장할 변수
+  <script>
+    const number = Number(prompt('몇 명이 참가하시나요?')); // 참가자 수를 저장할 변수
+    const $input = document.querySelector('input');
+    const $button = document.querySelector('button');
+    const $word = document.querySelector('#word');
+    const $order = document.querySelector('#order');
+    const $number = document.querySelector('#number');
+    const $form = document.querySelector('form');
+    let word; // 제시어
+    let newWord; // 현재 단어
 
-      $form.addEventListener('submit', (e) => {
-        e.preventDefault();
-      });
+    if (number > 0) { // prompt에 음수를 입력하거나 숫자가아닌 값을 넣으면 다시하라고 경고!
+      document.querySelector('#view').style.visibility = 'visible';
+    } else { // 숫자입력안하거나 마이너스 숫자를 입력시
+      alert('숫자만 입력해주세요. \n새로고침해서 다시 시작해주세요.');
+    }
+    $number.textContent = `${number}`;
 
-      const onClickButton = () => {
-        if (!word || word[word.length - 1] === newWord[0]) {
-          // 첫번째로 단어를 제시하는사람인가? => 제시어가 비어있는가?
-          // 제시어가 비어 있거나 입력한 단어가 올바른가?
-          // 입력한 단어가 올바른가? => 제시어의 끝문자와 새로 입력한 단어의 첫문자가 같은가?
-          word = newWord; // 입력한 단어가 제시어가 된다.
-          $word.textContent = word; // 화면에 제시어 표시
-          const order = Number($order.textContent); // 현재 순서를 저장할 변수 생성
-          if (order + 1 > number) {
-            // 현재순서에 1을 더한값이 참가자수보다 큰 경우 => 현재순서가 3번이고 참가자수가 3명이라면 3번에서 1번으로 순서를 넘겨줘야한다.
-            $order.textContent = 1; // 1은 자동으로 문자열로 형변환된다.
-          } else {
-            // 현재순서에 1을 더한값이 참가자수보다 작거나 같은 경우
-            $order.textContent = order + 1;
-          }
+    const onClickButton = () => {
+      if (!word || word[word.length - 1] === newWord[0]) { // 제시어가 비어 있거나 입력한 단어가 올바른가?
+        word = newWord;
+        $word.textContent = word;
+        const order = Number($order.textContent);
+        if (order + 1 > number) { // 3번참가자의 순서일 경우 다음순서가 1번으로 가야한다.
+          $order.textContent = 1;
         } else {
-          // 제시어가 올바르지 않은 경우
-          alert('올바르지 않은 단어입니다!');
+          $order.textContent = order + 1;
         }
-        $input.value = '';
-        $input.focus();
-      };
+      } else { // 제시어가 올바르지 않은 경우
+        alert('올바르지 않은 단어입니다!');
+      }
+      $input.value = '';
+      $input.focus();
+    };
 
-      const onInput = (event) => {
-        newWord = event.target.value; // 인풋에 입력한 값을 새로 입력한 단어에 저장
-      };
+    const onInput = (event) => {
+      newWord = event.target.value;
+    };
 
-      // 이벤트 리스너 설정
-      $input.addEventListener('input', onInput);
-      $button.addEventListener('click', onClickButton);
+    // 이벤트 리스너 설정
+    $input.addEventListener('input', onInput);
+    $button.addEventListener('click', onClickButton);
+    $form.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  </script>
+</body>
 
-      // 게임시작시 나오는 텍스트
-      $number.textContent = `${number}`;
-    </script>
-  </body>
 </html>
