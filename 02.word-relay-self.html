@@ -1,64 +1,127 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>쿵쿵따</title>
-    <style></style>
-  </head>
 
-  <body>
-    <div><span id="order">1</span>번째 참가자</div>
-    <div>제시어 : <span id="word"></span></div>
-    <input type="text" />
-    <button>입력</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>쿵쿵따</title>
+  <style></style>
+</head>
 
-    <script>
-      const number = parseInt(prompt('몇 명이 참가하나요?'), 10);
-      // 취소를 누르면 number가 NaN이 됨
-      if (number) {
-        // number가 truthy 할때만 실행되게
-        const $input = document.querySelector('input');
-        const $button = document.querySelector('button');
-        const yesOrNo = confirm('맞나요?');
-        const $word = document.querySelector('#word');
-        const $order = document.querySelector('#order');
-        let word; // 제시어
-        let newWord; // 새로 입력한 단어
+<body>
+  <h1 style="text-align: center">쿵쿵따 게임</h1>
+  <h2 id="refresh" style="display: none; text-align: center;">게임을 다시 시작하고 싶으시다면 새로고침 해주세요 :)</h2>
+  <div id="view" style="
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        visibility: hidden;
+      ">
+    <h2>쿵쿵따 게임에 오신것을 환영합니다.</h2>
+    <h3>
+      제시어는 세 글자여야만 하며,
+      제시어의 마지막 글자가 다음 입력할 단어의 첫번째 글자가 됩니다.</h3>
+    <h3>
+      참가자는 총 <span id="number" style="color: blueviolet"></span>명
+      입니다.
+    </h3>
+    <div style="padding: 20px; font-size: 1.5rem">
+      <span id="order" style="color: cadetblue">1</span>번 참가자의
+      차례입니다.
+    </div>
+    <div style="font-size: 2rem">
+      이번 제시어는
+      <span id="word" style="color: cornflowerblue">〇〇〇</span> 입니다.
+    </div>
+    <div style="display: flex; margin: 10px">
+      <form>
+        <input type="text" style="
+              font-size: 2rem;
+              margin-right: 10px;
+              width: 320px;
+              height: 50px;
+              box-sizing: border-box;
+              border: none;
+              border-bottom: 1px solid red;
+            " />
+        <button style="
+              vertical-align: 7px;
+              width: 50px;
+              height: 50px;
+              background-color: coral;
+              border-radius: 4px;
+              border: none;
+              color: white;
+            ">
+          입력
+        </button>
+      </form>
+    </div>
+  </div>
 
-        const onClickButton = () => {
-          if (
-            !word ||
-            (word[word.length - 1] === newWord[0] && newWord.length === 3)
-          ) {
-            // 제시어가 비어 있거나 입력한 단어가 올바른가?
-            word = newWord; // 입력한 단어가 제시어가 된다.
-            $word.textContent = word; // 화면에 제시어 표시
-            const order = Number($order.textContent); // 현재 순서를 저장할 변수 생성
-            if (order + 1 > number) {
-              // 현재순서에 1을 더한값이 참가자수보다 큰 경우
-              $order.textContent = 1;
-            } else {
-              // 현재순서에 1을 더한값이 참가자수보다 작거나 같은 경우
-              $order.textContent = order + 1;
-            }
+  <script>
+    const number = Number(prompt('몇 명이 참가하시나요?')); // 참가자 수를 저장할 변수
+
+    if (number > 0) { // 음수 입력 방지
+      const $input = document.querySelector('input');
+      const $button = document.querySelector('button');
+      const $word = document.querySelector('#word');
+      const $order = document.querySelector('#order');
+      const $number = document.querySelector('#number');
+      const $form = document.querySelector('form');
+      let word; // 제시어
+      let newWord; // 현재 단어
+
+      document.querySelector('#view').style.visibility = 'visible';
+      $number.textContent = `${number}`;
+
+      // word == undefined == false
+      // !word == true
+      // 제시어가 있으면 !word는 false가 된다. 
+      // 제시어가 없으면 !word는 true가 된다.
+      const onClickButton = () => {
+        if (newWord.length === 3 && (!word || word[word.length - 1] === newWord[0])) { // 입력어가 세글자이고 제시어가 비어있는가 또는 입력한 단어가 올바른가?
+          word = newWord;
+          $word.textContent = word;
+          const order = Number($order.textContent);
+          if (order + 1 > number) { // 3번참가자의 순서일 경우 다음순서가 1번으로 가야한다.
+            $order.textContent = 1;
           } else {
-            // 올바르지 않다.
+            $order.textContent = order + 1;
+          }
+        } else { // 입력어가 세글자가 아닌경우, 제시어가 올바르지 않은 경우, 제시어가 이미 있는 경우
+          if (newWord.length !== 3) {
+            alert('제시어는 세 글자여야합니다.')
+          } else {
             alert('올바르지 않은 단어입니다!');
           }
-          $input.value = '';
-          $input.focus();
-        };
+        }
+        $input.value = '';
+        $input.focus();
+      };
 
-        const onInput = (event) => {
-          newWord = event.target.value; // 입력하는 단어를 현재 단어로
-        };
+      const onInput = (event) => {
+        newWord = event.target.value;
+      };
 
-        alert(`${number}명 참가했습니다.`); // 몇 명이 참가할지 선택한다.
-        $input.addEventListener('input', onInput);
-        $button.addEventListener('click', onClickButton);
+      // 이벤트 리스너 설정
+      $input.addEventListener('input', onInput);
+      $button.addEventListener('click', onClickButton);
+      $form.addEventListener('submit', (e) => {
+        e.preventDefault();
+      });
+    } else { // prompt 취소 누르면 number가 null이 된다.
+      if (number === 0) { // Number(null) === 0
+        console.log('취소')
+        alert('0을 입력하셨거나 취소를 누르셨군요. \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요!!')
+      } else {
+        alert('숫자(양수)만 입력해주세요! \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요 :)');
+        document.querySelector('#refresh').style.display = 'block'
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
