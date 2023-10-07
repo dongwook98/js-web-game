@@ -76,6 +76,10 @@
     }
     $number.textContent = `${number}`;
 
+    // word == undefined == false
+    // !word == true
+    // 제시어가 있으면 !word는 false가 된다. 
+    // 제시어가 없으면 !word는 true가 된다.
     const onClickButton = () => {
       if (!word || word[word.length - 1] === newWord[0]) { // 제시어가 비어 있거나 입력한 단어가 올바른가?
         word = newWord;
