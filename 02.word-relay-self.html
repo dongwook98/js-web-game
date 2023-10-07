@@ -112,9 +112,8 @@
       $form.addEventListener('submit', (e) => {
         e.preventDefault();
       });
-    } else { // prompt 취소 누르면 number가 null이 된다.
+    } else { // prompt 취소 누르면 null 반환
       if (number === 0) { // Number(null) === 0
-        console.log('취소')
         alert('0을 입력하셨거나 취소를 누르셨군요. \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요!!')
       } else {
         alert('숫자(양수)만 입력해주세요! \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요 :)');
