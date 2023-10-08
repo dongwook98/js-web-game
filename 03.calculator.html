@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <head>
   <meta charset="utf-8" />
   <title>계산기</title>
@@ -62,18 +61,15 @@
     }
   </style>
 </head>
-
 <html>
-
 <body>
   <h1 style="text-align: center;">계산기</h1>
   <div id="center">
     <div id="main">
       <div>
-        <input readonly id="operator" />
+        <input readonly id="operator" /> <!-- readonly 사용자가 글자를 쓰지못하게 하는 속성 -->
         <input readonly type="number" id="result" />
       </div>
-      <!-- readonly 사용자가 글자를 쓰지못하게 하는 속성 -->
       <div class="row">
         <button id="num-7">7</button>
         <button id="num-8">8</button>
@@ -107,22 +103,20 @@
     const $operator = document.querySelector('#operator');
     const $result = document.querySelector('#result');
 
-    // 숫자 버튼 기능 구현
     const onClickNumber = (number) => (event) => {
-      if (!operator) {
-        // 연산자가 없는 경우
-        numOne += number; // 숫자1에 데이터 넣어주기
-        $result.value += number; // 화면에 데이터 표시하기
+      if (!operator) { // 연산자가 없는 경우
+        numOne += number;
+        $result.value += number;
         return
       }
       // 이 아래로 operator가 존재하는 경우에만 실행된다.
-      if (!numTwo) {
-        // numTwo가 비어있는 경우
+      if (!numTwo) { // numTwo가 비어있는 경우
         $result.value = '';
       }
-      numTwo += number; // 숫자2에 데이터 넣어주기
-      $result.value += number; // 화면에 데이터 표시하기
+      numTwo += number;
+      $result.value += number;
     } // 고차 함수(high order function)로 중복 제거하기 , 이벤트객체로도 중복제거가능 event.target.value , 중첩 if문 제거함
+    
     document
       .querySelector('#num-0')
       .addEventListener('click', onClickNumber('0'));
@@ -154,7 +148,6 @@
       .querySelector('#num-9')
       .addEventListener('click', onClickNumber('9'));
 
-    // 연산자버튼 기능 구현
     const onClickOperator = (op) => () => {
       if (numOne) {
         operator = op;
@@ -177,7 +170,6 @@
       .querySelector('#multiply')
       .addEventListener('click', onClickOperator('*'));
 
-    // = 버튼 기능구현  
     document.querySelector('#calculate').addEventListener('click', () => {
       if (numTwo) {
         // numTwo 가 있는경우
@@ -215,7 +207,6 @@
       }
     });
 
-    //초기화 버튼 기능구현
     document.querySelector('#clear').addEventListener('click', () => {
       numOne = '';
       operator = '';
@@ -225,5 +216,4 @@
     });
   </script>
 </body>
-
 </html>
