@@ -103,50 +103,50 @@
     const $operator = document.querySelector('#operator');
     const $result = document.querySelector('#result');
 
-    const onClickNumber = (number) => (event) => {
+    const onClickNumber = (event) => {
       if (!operator) { // 연산자가 없는 경우
-        numOne += number;
-        $result.value += number;
+        numOne += event.target.textContent;
+        $result.value += event.target.textContent;
         return
       }
       // 이 아래로 operator가 존재하는 경우에만 실행된다.
       if (!numTwo) { // numTwo가 비어있는 경우
         $result.value = '';
       }
-      numTwo += number;
-      $result.value += number;
-    } // 고차 함수(high order function)로 중복 제거하기 , 이벤트객체로도 중복제거가능 event.target.value , 중첩 if문 제거함
+      numTwo += event.target.textContent;
+      $result.value += event.target.textContent;
+    } // event객체로 중복 제거, 중첩 if문 제거함
     
     document
       .querySelector('#num-0')
-      .addEventListener('click', onClickNumber('0'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-1')
-      .addEventListener('click', onClickNumber('1'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-2')
-      .addEventListener('click', onClickNumber('2'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-3')
-      .addEventListener('click', onClickNumber('3'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-4')
-      .addEventListener('click', onClickNumber('4'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-5')
-      .addEventListener('click', onClickNumber('5'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-6')
-      .addEventListener('click', onClickNumber('6'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-7')
-      .addEventListener('click', onClickNumber('7'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-8')
-      .addEventListener('click', onClickNumber('8'));
+      .addEventListener('click', onClickNumber);
     document
       .querySelector('#num-9')
-      .addEventListener('click', onClickNumber('9'));
+      .addEventListener('click', onClickNumber);
 
     const onClickOperator = (op) => () => {
       if (numOne) {
