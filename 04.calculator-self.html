@@ -131,7 +131,13 @@
       document.querySelector('#num-9').addEventListener('click', onClickNumber);
 
       const onClickOperator = (op) => () => {
-        console.log(op)
+        // 숫자1의 음수표현 가능하게해주는 코드
+        if (op === '-' && !numOne) {
+          numOne += op;
+          $result.value += op;
+          return;
+        } 
+
         if (numTwo) {
           switch (operator) {
             case '+':
@@ -152,19 +158,9 @@
           // 연이어 계산하기 기능 추가(ex. 1 + 2 + 3 가 되게끔)
           numOne = $result.value; // 이전에 계산했던 결과값을 넘버원에 저장
           numTwo = ''; // 이전에 numTwo에 들어있던 값 초기화
+          $operator.value = '';
+          operator = '';
         }
-
-        // 숫자1의 음수표현 가능하게해주는 코드
-        if (op === '-') {
-          if (numOne) { // 숫자1 존재하면 아래코드 실행
-            operator = op;
-            $operator.value = operator;
-          } else { // 숫자1 존재하지않으면 아래코드 실행
-            numOne += op;
-            $result.value += op;
-          }
-          return;
-        } 
 
         if (numOne) {
           operator = op;
@@ -172,7 +168,6 @@
         } else {
           alert('숫자를 먼저 입력하세요.');
         }
-
       };
 
       document.querySelector('#plus').addEventListener('click', onClickOperator('+'));
