@@ -5,14 +5,107 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>숫자 야구</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #center {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #game-rule, #game-example {
+        margin-top: 20px;
+        padding: 20px 40px;
+        line-height: 2rem;
+      }
+
+      #game-rule {
+        border: 3px solid cornflowerblue;
+      }
+
+      #game-example {
+        font-size: 1.4rem;
+        border: 3px solid darkcyan;
+        
+      }
+
+      #form {
+        margin-top: 40px;
+        display: flex;
+      }
+
+      #input {
+        width: 600px;
+        height: 70px;
+        border: none;
+        border-bottom: 1px solid salmon;
+      }
+
+      form > button {
+        margin-left: 15px;
+        width: 100px;
+        font-size: 1.4rem;
+        font-weight: 600;
+        background-color: coral;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+
+      div:nth-last-of-type(2) {
+        margin-top: 40px;
+        font-size: 1.6rem;
+        text-align: center;
+      }
+
+      #logs {
+        margin-top: 10px;
+        border: 1px solid black;
+        padding: 20px 40px;
+        width: 700px;
+      }
+    </style>
   </head>
   <body>
-    <form id="form">
-      <input type="text" id="input" />
-      <button>확인</button>
-    </form>
-    <!-- input만 써도 되나 form으로 감싸주는게 Html표준에 적합함 -->
-    <div id="logs"></div>
+    <div id="center">
+      <h1 id="title">⚾️ 숫자 야구 ⚾️</h1>
+      <h2 id="game-rule">
+        <div>⚖️ 게임 룰⚖️</div>
+        <br>
+        컴퓨터가 숫자 1~9 중에서 중복되지 않게 네 개를 고릅니다.
+        <br>
+        여러분들에게는 10번의 기회가 주어지고 컴퓨터가 고른 숫자 네 개를 맞히면 됩니다.
+        <br>
+        이때 숫자만 맞히는 것이 아니라 숫자의 순서까지 맞혀야 합니다. 기회가 적은 대신, 틀릴 때마다 힌트를 줍니다.
+        <br>
+        맞힌 숫자의 개수(볼), 숫자뿐만 아니라 순서까지 맞힌 개수(스트라이크)를 알려줍니다.
+      </h2>
+      <p id="game-example">예를 들어, 컴퓨터가 5728을 뽑았다고 가정해 봅시다. 플레이어가 7129를 말한다면, 컴퓨터는 1스트라이크, 1볼이라고 말해줍니다. 
+        <br>
+        7은 숫자만 맞혀서 볼이고, 2는 숫자에 순서(세 번째)까지 맞혀서 스트라이크입니다.
+        <br>
+        마찬가지로 플레이어가 7528을 말한다면, 2스트라이크 2볼이 되고, 7285를 말한다면 4볼이 됩니다.
+        <br>
+        5728을 말한다면 4스트라이크(홈런)가 되어 이기게 됩니다. 그리고 10번의 기회 안에 맞히지 못한다면 컴퓨터가 승리합니다. 
+        <br>
+      </p>
+      <form id="form">
+        <input type="text" id="input" />
+        <button>제출</button>
+      </form>
+      <!-- input만 써도 되나 form으로 감싸주는게 Html표준에 적합함 -->
+      <div>기록 리스트</div>
+      <div id="logs"></div>
+    </div>
     <script>
       const $input = document.querySelector('#input');
       const $form = document.querySelector('#form');
