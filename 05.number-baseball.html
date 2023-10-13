@@ -119,9 +119,6 @@
       const answer = []; // 중복되지않는 4개의 숫자를 저장할 변수
       for (let n = 0; n < 4; n += 1) { // 네 번 반복
         const index = Math.floor(Math.random() * numbers.length); // 0~8 정수
-        // 우리가 원하는것은 1~9까지인데 왜 0~8까지를 구했을까? 인덱스는 0부터 시작하고 마지막 인덱스는 8임  
-        // numbers.length라고 쓴 이유 ? splice로 numbers 배열의 개수가 점점 작아지기때문임
-        // numbers.length 대신 9-n 해줘도 됨
         answer.push(numbers[index]); 
         numbers.splice(index, 1);
       }
@@ -156,22 +153,16 @@
         const value = $input.value;
         console.log(value)
         $input.value = '';
-        const valid = checkInput(value);
-        if (!valid) { // 형식 통과 못했을때
+        if (!checkInput(value)) { 
           return;
         }
-        // 이 아래로 코드는 입력값이 형식에 통과 했을때 실행
+        // 이 아래로 입력값 문제없음
         if (answer.join('') === value) {
-          console.log(answer.join(''))
-          // 무작위로 뽑은 4개의숫자가 배열에 들어가있으니 join() 해서 합쳐줌
-          // 입력값이 정답을 맞췄다면
+          console.log(answer.join(''));
           $logs.textContent = '홈런! 축하드립니다. 게임에서 승리하셨습니다!';
           return;
         }
         if (tries.length >= 9) {
-          // 예시 직접들어서 검증해보자
-          // 9인이유? : 10번시도했을때 tries배열안에는 요소9개가들어있다.
-          // 10번 시도했다면?
           defeated();
           return;
         }
