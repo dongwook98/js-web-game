@@ -191,9 +191,18 @@
         }
         if (strike === 0 && ball === 0) {
           out++;
-          $logs.append(`${value} -> ${out}아웃!`, document.createElement('br'));
+          let outText = document.createElement('span');
+          outText.style = 'color: red';
+          outText.textContent = '아웃'
+          $logs.append(`${value} -> ${out} `, outText, document.createElement('br'));
         } else {
-          $logs.append(`${value} -> ${strike} 스트라이크 ${ball}볼`, document.createElement('br'));
+          let strikeText = document.createElement('span');
+          strikeText.style = 'color: blue';
+          strikeText.textContent = '스트라이크'
+          let ballText = document.createElement('span');
+          ballText.style = 'color: green';
+          ballText.textContent = '볼'
+          $logs.append(`${value} -> ${strike} `, strikeText, ` ${ball} `, ballText, document.createElement('br'));
         }
         if (out === 3) {
           defeated();
