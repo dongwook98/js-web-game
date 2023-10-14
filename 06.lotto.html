@@ -3,6 +3,15 @@
   <meta charset="utf-8" />
   <title>로또추첨기</title>
   <style>
+    #title {
+      text-align: center;
+    }
+    p {
+      font-size: 1.4rem;
+    }
+    .ball:first-of-type {
+      margin-left: 10px;
+    }
     .ball {
       display: inline-block;
       border: 1px solid black;
@@ -14,10 +23,24 @@
       text-align: center;
       margin-right: 20px;
     }
+    #result, #bonus {
+      font-size: 2rem;
+      font-weight: bolder;
+      display: flex;
+      align-items: center;
+    }
+    #bonus {
+      margin-top: 20px;
+    }
   </style>
 </head>
 
 <body>
+  <h1 id="title">로또 추첨기</h1>
+  <p>1~45까지의 랜덤한 숫자 6개와 보너스 공 1개를 뽑아주는 프로그램입니다.
+    <br />
+    1~9는 <span style="color: red;">빨간색</span>, 10~19는 <span style="color: orange;">주황색</span> , 20~29는 <span style="color: yellow; background-color: black;">노란색</span> , 30~39는 <span style="color: blue;">파란색</span> , 40~45는 <span style="color: green;">초록색</span>을 입혀서 직관적으로 구별할 수 있게 해주었습니다. 
+  </p>
   <div id="result">추첨 결과는?</div>
   <div id="bonus">보너스:</div>
   <script>
@@ -30,7 +53,7 @@
       shuffle.push(value); // shuffle 배열에 넣기
     }
     console.log(shuffle);
-    const winBalls = shuffle.slice(0,6).sort((a, b) => a - b);
+    const winBalls = shuffle.slice(0, 6).sort((a, b) => a - b);
     const bonus = shuffle[6];
     console.log(winBalls, bonus); 
     
@@ -62,18 +85,16 @@
       $target.appendChild($ball);
     }
   
+    // [0, 1, 2, 3, 4, 5] -> [1000, 2000, 3000, 4000, 5000, 6000]
     for (let i = 0; i < winBalls.length; i++) {
       setTimeout(() => {
         console.log(winBalls[i], i);
         showBall(winBalls[i], $result);
-      }, (i+1) * 1000);
+      }, (i + 1) * 1000);
     }
 
     setTimeout(() => {
       showBall(bonus, $bonus);
     }, 7000);
-    
-  
-  
   </script>
 </body>
