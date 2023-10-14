@@ -83,7 +83,7 @@
       colorize(number, $ball);
       $ball.textContent = number;
       $target.appendChild($ball);
-    }
+    } // 함수로 중복 제거
   
     // [0, 1, 2, 3, 4, 5] -> [1000, 2000, 3000, 4000, 5000, 6000]
     for (let i = 0; i < winBalls.length; i++) {
@@ -91,7 +91,7 @@
         console.log(winBalls[i], i);
         showBall(winBalls[i], $result);
       }, (i + 1) * 1000);
-    }
+    } // 반복되는 코드 for문으로 축소
 
     setTimeout(() => {
       showBall(bonus, $bonus);
