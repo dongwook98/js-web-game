@@ -4,20 +4,80 @@
   <title>가위바위보</title>
   <style>
     #computer {
-      width: 142px;
+      width: 165px;
       height: 200px;
+    }
+    h1 {
+      text-align: center;
+    }
+    #game-explain {
+      font-size: 1.3rem;
+      text-align: center;
+    }
+    #main {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #main div:nth-of-type(2) {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-evenly;
+      width: 500px;
+    }
+    #main div:nth-of-type(2) > button {
+      font-size: 1.4rem;
+      font-weight: bolder;
+      color: white;
+      width: 100px;
+      padding: 20px;
+      border-radius: 4px;
+      border: 1px solid lightblue;
+      
+    }
+    #main div:nth-of-type(2) > button:nth-child(1) {
+      background-color: red;
+    }
+    #main div:nth-of-type(2) > button:nth-child(2) {
+      background-color: blue;
+    }
+    #main div:nth-of-type(2) > button:nth-child(3) {
+      background-color: green;
+    }
+    #main div:nth-of-type(2) > button:hover {
+     filter: brightness(0.7);
+    }
+    #main div:nth-of-type(3), #main div:nth-of-type(4) {
+      font-weight: bold;
+    }
+    #main div:nth-of-type(3) {
+      margin-top: 60px;
+      font-size: 2rem;
+    }
+    #main div:nth-of-type(4) {
+      margin-top: 10px;
+      font-size: 1.6rem;
     }
   </style>
 </head>
 
 <body>
-<div id="computer"></div>
-<div>
-  <button id="scissors" class="btn">가위</button>
-  <button id="rock" class="btn">바위</button>
-  <button id="paper" class="btn">보</button>
-</div>
-<div id="score">0</div>
+  <h1>가위바위보</h1>
+  <p id="game-explain">승리하게 되면 1점, 패배하게 되면 컴퓨터가 1점, 무승부면 0점을 획득합니다.
+    <br />
+    먼저 3점을 획득하면 게임에서 승리하게 됩니다.
+  </p>
+  <div id="main">
+    <div id="computer"></div>
+    <div>
+      <button id="scissors" class="btn">가위</button>
+      <button id="rock" class="btn">바위</button>
+      <button id="paper" class="btn">보</button>
+    </div>
+    <div>점수</div>
+    <div id="score">0</div>
+  </div>
 <script>
   const $computer = document.querySelector('#computer');
   const $score = document.querySelector('#score');
@@ -25,13 +85,13 @@
   const $scissors = document.querySelector('#scissors');
   const $paper = document.querySelector('#paper');
   const IMG_URL = './rsp.png';
-  $computer.style.background = `url(${IMG_URL}) 0 0`; // 0, 0 : 가로 위치, 세로 위치
-  $computer.style.backgroundSize = 'auto 200px'; // auto : 높이 200px에 맞춰서 알아서 맞춰줌 // auto, 200px : 가로 너비, 세로 너비 
+  $computer.style.background = `url(${IMG_URL}) 0 0`; // 0 0 : 가로 위치, 세로 위치
+  $computer.style.backgroundSize = 'auto 200px'; // auto : 높이 200px에 맞춰서 알아서 맞춰줌 // auto 200px : 가로 너비, 세로 너비 
 
   const rspX = {
-    scissors: '0', // 가위
-    rock: '-220px', // 바위
-    paper: '-440px', // 보
+    scissors: '0', 
+    rock: '-220px',
+    paper: '-440px',
   }
 
   let computerChoice = 'scissors'
