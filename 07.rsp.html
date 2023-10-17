@@ -85,8 +85,8 @@
   const $scissors = document.querySelector('#scissors');
   const $paper = document.querySelector('#paper');
   const IMG_URL = './rsp.png';
-  $computer.style.background = `url(${IMG_URL}) 0 0`; // 0 0 : 가로 위치, 세로 위치
-  $computer.style.backgroundSize = 'auto 200px'; // auto : 높이 200px에 맞춰서 알아서 맞춰줌 // auto 200px : 가로 너비, 세로 너비 
+  $computer.style.background = `url(${IMG_URL}) 0 0`;
+  $computer.style.backgroundSize = 'auto 200px';
 
   const rspX = {
     scissors: '0', 
@@ -98,7 +98,7 @@
 
   const changeComputerHand = () => {
     if(computerChoice === 'scissors') { // 가위면
-      computerChoice = 'rock'; // 항상 데이터와 화면을 동시에 바꿔줘야한다.
+      computerChoice = 'rock'; 
     } else if (computerChoice === 'rock') { // 바위면
       computerChoice = 'paper';
     } else if (computerChoice === 'paper'){ // 보자기면
@@ -106,10 +106,14 @@
     }
     $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
     $computer.style.backgroundSize = 'auto 200px'; 
-    // background와 backgroundSize는 세트로 다녀야한다. backgroundSize를 안적어주면 리셋되버린다. 
   }
   let intervalId = setInterval(changeComputerHand, 50);
 
+  // 가위: 1,  바위: 0,   보: -1
+  // 나\컴퓨터  가위    바위       보
+  // 가위       0       1       2
+  // 바위      -1       0       1
+  // 보        -2      -1      0
   const scoreTable = {
     rock: 0,
     scissors: 1,
@@ -145,9 +149,9 @@
         message = '무승부';
       }
       if(me >= 3) {
-        $score.textContent = `나의 승리 ${me}:${computer}`;
+        $score.textContent = `🎉 나의 승리 ${me}:${computer}`;
       } else if (computer >= 3) {
-        $score.textContent = `컴퓨터의 승리 ${me}:${computer}`;
+        $score.textContent = `😔 컴퓨터의 승리 ${me}:${computer}`;
       } else {
         $score.textContent = `${message} 나의 점수:${me}, 
         컴퓨터의 점수:${computer}`
@@ -161,29 +165,4 @@
   $rock.addEventListener('click', clickButton);
   $scissors.addEventListener('click', clickButton);
   $paper.addEventListener('click', clickButton);
-
-
-  // clickButton 5번 호출, 인터벌 1번, 2번, 3번, 4번, 5번(얘만 intervalId에 저장) 
-  // 그 다음에 버튼을 클릭하면 인터벌 5번만 취소 -> 그래서 그림이 멈추지 않는것!
-  const clickButton2 = () => {
-    clearInterval(intervalId);
-    
-    // 버그해결 2번째 방법. 클릭한다음 1초동안 버튼 클릭 이벤트 제거
-    $rock.removeEventListener('click', clickButton);
-    $scissors.removeEventListener('click', clickButton);
-    $paper.removeEventListener('click', clickButton);
-    // 점수 계산 및 화면 표시
-    setTimeout(() => { // 클릭 한 다음 1초후에 실행 된다. 
-      clearInterval(intervalId); // 버그해결 1번째 방법. 혹시나 직전 인터벌이 있으면 제거
-      intervalId = setInterval(changeComputerHand, 50);
-      
-      // 버그해결 2번째 방법. 1초 후에 버튼 클릭 이벤트 추가
-      $rock.addEventListener('click', clickButton);
-      $scissors.addEventListener('click', clickButton);
-      $paper.addEventListener('click', clickButton);
-    }, 1000);
-  };
-  // $rock.addEventListener('click', clickButton);
-  // $scissors.addEventListener('click', clickButton);
-  // $paper.addEventListener('click', clickButton);
 </script>
