@@ -50,21 +50,20 @@
 
   let startTime; 
   let endTime;
-  const records = []; // 반응속도
+  const records = []; // 반응속도 모아놓은 배열
   let timeoutId;
+  
   $screen.addEventListener('click', (event) => {
-    if (event.target.classList.contains('waiting')) { // 대기 화면
+    if (event.target.classList.contains('waiting')) { // 파랑
       $screen.classList.remove('waiting');
       $screen.classList.add('ready');
       $screen.textContent = '초록색이 되면 클릭하세요.';
-
       timeoutId = setTimeout(() => {
         startTime = new Date();
         $screen.classList.remove('ready');
         $screen.classList.add('now');
         $screen.textContent = '클릭하세요!!';
       }, Math.floor(Math.random() * 1000) + 2000); // 2초에서 3초 사이 2000~3000 사이 수
-      // 2000 <= X * 1000 + 2000 < 1000 + 2000
     } else if(event.target.classList.contains('ready')) { // 빨강
       clearTimeout(timeoutId);
       $screen.classList.remove('ready');
