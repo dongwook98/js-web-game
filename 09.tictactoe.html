@@ -32,23 +32,6 @@
 
 <body>
   <h1>틱택토 게임</h1>
-  <!-- <table>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-  </table> -->
 <script>
   const { body } = document; // 구조분해할당
   const $table = document.createElement('table');
@@ -69,7 +52,7 @@
     
     let hasWinner = false; // 세칸 다 채워졌나?
     // 가로줄 검사
-    if(
+    if (
       rows[rowIndex][0].textContent === turn &&
       rows[rowIndex][1].textContent === turn &&
       rows[rowIndex][2].textContent === turn
@@ -85,7 +68,7 @@
       hasWinner = true;
     }
     // 대각선 검사
-    if(
+    if (
       rows[0][0].textContent === turn &&
       rows[1][1].textContent === turn &&
       rows[2][2].textContent === turn
@@ -103,22 +86,17 @@
   }
 
   const callback = (event) => {
-    if(event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
-      console.log('빈칸이 아닙니다.');
+    if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
       return; // 칸이 이미 있는 경우 아래 코드 실행안되게 리턴!
     } 
-    // 빈 칸이면?
-    console.log('빈칸입니다');
     event.target.textContent = turn;
     // 승부 판단하기
     const hasWinner = checkWinner(event.target);
-    // 승자가 있으면
-    if (hasWinner) {
+    if (hasWinner) { // 승자가 있으면
       $result.textContent = `🎉 ${turn}의 승리! 🎉`
-      $table.removeEventListener('click', callback); // 승리 이후에도 클릭안되게 이벤트 제거
+      $table.removeEventListener('click', callback);
       return;
     }
-    // 승자가 없으면
     // 무승부 검사
     const draw = rows.flat().every((cell) => cell.textContent);
     if (draw) {
@@ -126,10 +104,9 @@
       return;
     }
     turn = turn === 'X' ? 'O' : 'X';
-  };
+  }; // 함수 분리
   
   for (let i = 0 ; i < 3; i++) {
-    // createElement를 한번 만들면 한번밖에 못씀 (주의)
     const $tr = document.createElement('tr');
     const cells = []; // 데이터 3개 만들어줌 반복문 돌 때 마다 새로운 배열이 생성되는 거임 (중요)
     for (let j = 0; j < 3; j++) {
