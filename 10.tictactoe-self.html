@@ -4,31 +4,43 @@
 <meta charset="utf-8" />
 <title>틱택토</title>
 <style>
+  h1, p {
+    text-align: center;
+  }
   table {
+    margin: 0 auto;
+    width: 500px;
+    height: 500px;
     border-collapse: collapse;
   }
-
   td {
+    font-size: 3rem;
     border: 1px solid black;
-    width: 40px;
-    height: 40px;
+    width: 166.333px;
+    height: 166.333px;
     text-align: center;
+  }
+  div {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 4rem;
   }
 </style>
 </head>
 
 <body>
+  <h1>틱택토 게임</h1>
+  <p>09.tictactoe 를 업그레이드 하여서 컴퓨터의 차례도 구현해봤습니다.</p>
 <script>
-  const { body } = document; // 구조분해할당
+  const { body } = document; 
   const $table = document.createElement('table');
   const $result = document.createElement('div');
-  const rows = []; // 행(가로, 줄)
+  const rows = [];
   let turn = 'O';
 
   const checkWinner = (target) => {
-    const rowIndex = target.parentNode.rowIndex; // tr태그는 rowIndex를 자체적으로 가지고있음
-    const cellIndex = target.cellIndex; // td태그는 cellIndex를 자체적으로 가지고있음
-    
+    const rowIndex = target.parentNode.rowIndex; 
+    const cellIndex = target.cellIndex;
     
     let hasWinner = false; // 세칸 다 채워졌나?
     // 가로줄 검사
@@ -67,8 +79,7 @@
 
   const checkWinnerAndDraw = (target) => {
     const hasWinner = checkWinner(target);
-      // 승자가 있으면
-      if (hasWinner) {
+      if (hasWinner) { // 승자가 있으면
         $result.textContent = `${turn}님이 승리!`
         $table.removeEventListener('click', callback);
         return;
@@ -89,18 +100,16 @@
     if (!clickable) {
       return;
     } // clickable이 false 일 때는 클릭(콜백실행)안되게 리턴
-    if(event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
-      console.log('빈칸이 아닙니다.');
+    if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
       return; // 칸이 이미 있는 경우 아래 코드 실행안되게 리턴!
     } 
     // 빈 칸이면?
-    console.log('빈칸입니다');
     event.target.textContent = turn;
     // 승부 판단하기
     checkWinnerAndDraw(event.target);
     
     // 컴퓨터의 턴
-    if(turn === 'X') {
+    if (turn === 'X') {
       const emptyCells = rows.flat().filter((el) => !el.textContent);
       const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
       clickable = false; // 셋타임아웃 돌아가는동안은 클릭못하게 false
@@ -112,25 +121,20 @@
     }
   };
   
-  for(let i = 0 ; i < 3; i++) {
-    // createElement를 한번 만들면 한번밖에 못씀 (주의)
-    const $tr = document.createElement('tr'); // 반복문안에 넣어서 3번 tr 태그 생성
+  for (let i = 0 ; i < 3; i++) {
+    const $tr = document.createElement('tr'); 
     const cells = []; // 데이터 3개 만들어줌 반복문 돌 때 마다 새로운 배열이 생성되는 거임 (중요)
-    for(let j = 0; j < 3; j++) {
-      const $td = document.createElement('td'); // 반복문안에 넣어서 9번 td 태그 생성
-      cells.push($td); // html 태그를 배열에 넣어줌! 나중에 .textContent로 가져오면 되기 때문에 좋은 방법!
-      // j==0, cells == [td, td, td]
-      // j==1, cells == [td, td, td]
-      // j==2, cells == [td, td, td]
-      // 각각의 cells는 다른 배열임
-      $tr.append($td); // tr태그에 td태그 9번 넣어줌
+    for (let j = 0; j < 3; j++) {
+      const $td = document.createElement('td'); 
+      cells.push($td); 
+      $tr.append($td); 
     }
-    rows.push(cells); // cells 데이터 3개를 rows 에 넣으면 우리가 원하는 이차원배열 데이터 구조 완성
-    $table.append($tr); // table태그에 tr태그 3번 넣어줌
+    rows.push(cells); 
+    $table.append($tr);
   }
-  $table.addEventListener('click', callback); // 이벤트 버블링 이용!
+
+  $table.addEventListener('click', callback); // 이벤트 버블링 이용
   body.append($table);
   body.append($result);
-  console.log(rows);
 </script>
 </body>
