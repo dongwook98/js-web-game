@@ -13,7 +13,6 @@
     height: 500px;
     border-collapse: collapse;
   }
-
   td {
     font-size: 3rem;
     border: 1px solid black;
@@ -21,7 +20,6 @@
     height: 166.333px;
     text-align: center;
   }
-
   div {
     margin-top: 20px;
     text-align: center;
@@ -48,7 +46,6 @@
   const checkWinner = (target) => {
     const rowIndex = target.parentNode.rowIndex; // tr태그는 rowIndex를 자체적으로 가지고있음
     const cellIndex = target.cellIndex; // td태그는 cellIndex를 자체적으로 가지고있음
-    
     
     let hasWinner = false; // 세칸 다 채워졌나?
     // 가로줄 검사
