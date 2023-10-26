@@ -95,11 +95,11 @@
       turn = turn === 'X' ? 'O' : 'X';
   }
 
-  let clickable = true; // 플래그 변수만들어서 비동기(타이머) 제어
+  let clickable = true; // 플래그 변수만들어서 컴퓨터의 차례 일때는 클릭 못하게
   const callback = (event) => {
     if (!clickable) {
       return;
-    } // clickable이 false 일 때는 클릭(콜백실행)안되게 리턴
+    }
     if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
       return; // 칸이 이미 있는 경우 아래 코드 실행안되게 리턴!
     } 
