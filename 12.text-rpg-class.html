@@ -185,8 +185,9 @@
 
   class Hero {
     constructor(game, name) {
-      this.game = game; // Game과 상호작용 
-      // this === game.hero 
+      this.game = game; // Game과 상호작용 // this === game.hero // game.hero.game = game;
+      // game.hero = hero도 필요하고
+      // game.hero.game = game도 있어야 서로의 객체에서 다른 것에 접근이 됩니다. 
       this.name = name;
       this.lev = 1;
       this.maxHp = 100;
