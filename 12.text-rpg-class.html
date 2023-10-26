@@ -39,6 +39,10 @@
       font-size: 1.4rem;
       margin-right: 20px;
     }
+    #hero-stat {
+      font-size: 1.4rem;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -102,10 +106,7 @@
   class Game {
     constructor(name) { 
       this.monster = null;
-      this.hero = new Hero(this, name); // Hero와 상호작용 
-//       1. class Game 안에서의 this가 밑에서 let으로 선언한 game을 가르키는건지, 아니면 Game 클래스를 가르키는 건지 헷갈립니다. ㅠㅠ 
-// 콘솔로그로 찍어본 결과 Game 클래스 자체가 나오는데, constructor안에서의 this는 game으로 동작한다고 봐도 무방한거 같아서요..! 왜 Game 클래스가 찍히는지 궁금합니다!
-      // this === game
+      this.hero = null; // Hero와 상호작용
       this.monsterList = [
         { name: '슬라임', hp: 25, att: 10, xp: 10 },
         { name: '스켈레톤', hp: 50, att: 15, xp: 20 },
@@ -115,10 +116,12 @@
       this.start(name);
       console.log(this);
     } 
-    start() {
+    start(name) {
       $gameMenu.addEventListener('submit', this.onGameMenuInput);
       $battleMenu.addEventListener('submit', this.onBattleMenuInput);
-      this.changeScreen('game'); 
+      this.changeScreen('game');
+      this.hero = new Hero(this, name);
+      this.updateHeroStat();
     }
     changeScreen(screen) {
       if(screen === 'start') {
@@ -138,7 +141,7 @@
     onGameMenuInput = (event) => {
       event.preventDefault();
       const input = event.target['menu-input'].value;
-      if(input === '1') { // 모험
+      if (input === '1') { // 모험
         this.changeScreen('battle');
       } else if (input === '2') { // 휴식
 
@@ -149,13 +152,29 @@
     onBattleMenuInput = (event) => {
       event.preventDefault();
       const input = event.target['battle-input'].value;
-      if(input === '1') { // 공격
+      if (input === '1') { // 공격
 
       } else if(input === '2') { // 회복
 
       } else if(input === '3') { // 도망
-
+        this.changeScreen('game');
       }
+    }
+    updateHeroStat() {
+      const { hero } = this;
+      if (hero === null) {
+        $heroName.textContent = '';
+        $heroLevel.textContent = '';
+        $heroHp.textContent = '';
+        $heroXp.textContent = '';
+        $heroAtt.textContent = '';
+        return;
+      }
+      $heroName.textContent = hero.name;
+      $heroLevel.textContent = `${hero.lev}레벨`;
+      $heroHp.textContent = `HP: ${hero.hp}/${hero.maxHp}`;
+      $heroXp.textContent = `XP: ${hero.xp}/${15 * hero.lev}`;
+      $heroAtt.textContent = `공격력: ${hero.att}`;
     }
   }
 
@@ -183,6 +202,7 @@
       this.hp -= monster.att;
     }
   }
+
   class Monster {
     constructor(game, name, hp, att, xp) {
       this.game = game;
