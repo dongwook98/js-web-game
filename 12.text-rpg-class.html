@@ -102,11 +102,11 @@
   const $monsterAtt = document.querySelector('#monster-att');
   const $message = document.querySelector('#message');
 
-  // 게임자체를 클래스로 만듬 (게임자체도 영웅과 몬스터가 상호작용하기때문에)
+  // 게임자체를 클래스로 만듬 (게임자체도 영웅과 몬스터와 상호작용하기때문에)
   class Game {
     constructor(name) { 
       this.monster = null;
-      this.hero = null; // Hero와 상호작용
+      this.hero = null; 
       this.monsterList = [
         { name: '슬라임', hp: 25, att: 10, xp: 10 },
         { name: '스켈레톤', hp: 50, att: 15, xp: 20 },
@@ -114,14 +114,15 @@
         { name: '옐둥이', hp: 200, att: 40, xp: 70 },
       ];
       this.start(name);
-      console.log(this);
     } 
     start(name) {
       $gameMenu.addEventListener('submit', this.onGameMenuInput);
       $battleMenu.addEventListener('submit', this.onBattleMenuInput);
       this.changeScreen('game');
-      this.hero = new Hero(this, name);
+      this.hero = new Hero(this, name); // Hero와 상호작용
       this.updateHeroStat();
+      console.log('Game this', this);
+      // this.hero.attack 이것도 가능하다. Game 안에서 Hero에 접근해서 Hero의 메서드를 사용가능!(서로 엮어놔서 가능한거임)
     }
     changeScreen(screen) {
       if(screen === 'start') {
@@ -142,7 +143,8 @@
       event.preventDefault();
       const input = event.target['menu-input'].value;
       if (input === '1') { // 모험
-        this.changeScreen('battle');
+        console.log('화살표 this',this);
+        this.changeScreen('battle'); // this === Game 인스턴스
       } else if (input === '2') { // 휴식
 
       } else if (input === '3') { // 종료
@@ -185,6 +187,7 @@
 
   class Hero {
     constructor(game, name) {
+      console.log('Hero this',this)
       this.game = game; // Game과 상호작용 // this === game.hero // game.hero.game = game;
       // game.hero = hero도 필요하고
       // game.hero.game = game도 있어야 서로의 객체에서 다른 것에 접근이 됩니다. 
@@ -194,6 +197,7 @@
       this.hp = 100;
       this.xp = 0;
       this.att = 10;
+      // this.game.updateHeroStat(); 이것도 가능하다. Hero 안에서 Game에 접근해서 Game의 메서드를 사용가능!(서로 엮어놔서 가능한거임)
     }
     attack(target) {
       target.hp -= this.att;
@@ -219,7 +223,6 @@
   }
 
   let game = null; 
-  // 인트로화면 기능 (데이터설정)
   $startScreen.addEventListener('submit', (event) => {
     event.preventDefault();
     const name = event.target['name-input'].value;
