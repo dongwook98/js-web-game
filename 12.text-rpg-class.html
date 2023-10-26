@@ -3,42 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>텍스트 RPG</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+    }
+    form > input {
+      font-size: 1.4rem;
+      width: 400px;
+      border: none;
+      border-bottom: 3px solid lightblue;
+    }
+    form > button {
+      color: white;
+      padding: 20px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-left: 5px;
+      background-color: cornflowerblue;
+      border: 1px solid lightgray;
+      border-radius: 4px;
+    }
+    #game-menu > div {
+      font-size: 1.4rem;
+      margin-right: 20px;
+    }
+    #battle-menu > div {
+      font-size: 1.4rem;
+      margin-right: 20px;
+    }
+  </style>
 </head>
 
 <body>
-<form id="start-screen">
-  <input id="name-input" placeholder="주인공 이름을 입력하세요!" />
-  <button id="start">시작</button>
-</form>
-<div id="screen">
-  <div id="hero-stat">
-    <span id="hero-name"></span>
-    <span id="hero-level"></span>
-    <span id="hero-hp"></span>
-    <span id="hero-xp"></span>
-    <span id="hero-att"></span>
-  </div>
-  <form id="game-menu" style="display: none;">
-    <div id="menu-1">1.모험</div>
-    <div id="menu-2">2.휴식</div>
-    <div id="menu-3">3.종료</div>
-    <input id="menu-input" />
-    <button id="menu-button">입력</button>
+  <h1>텍스트 RPG에 오신것을 환영합니다!</h1>
+  <form id="start-screen">
+    <input id="name-input" placeholder="주인공 이름을 입력하세요!" />
+    <button id="start">시작</button>
   </form>
-  <form id="battle-menu" style="display: none;">
-    <div id="battle-1">1.공격</div>
-    <div id="battle-2">2.회복</div>
-    <div id="battle-3">3.도망</div>
-    <input id="battle-input" />
-    <button id="battle-button">입력</button>
-  </form>
-  <div id="message"></div>
-  <div id="monster-stat">
-    <span id="monster-name"></span>
-    <span id="monster-hp"></span>
-    <span id="monster-att"></span>
+  <div id="screen">
+    <div id="hero-stat">
+      <span id="hero-name"></span>
+      <span id="hero-level"></span>
+      <span id="hero-hp"></span>
+      <span id="hero-xp"></span>
+      <span id="hero-att"></span>
+    </div>
+    
+    <form id="game-menu" style="display: none;">
+      <div>
+        <div id="menu-1">1.모험</div>
+        <div id="menu-2">2.휴식</div>
+        <div id="menu-3">3.종료</div>
+      </div>
+      <input id="menu-input" />
+      <button id="menu-button">입력</button>
+    </form>
+
+    <form id="battle-menu" style="display: none;">
+      <div>
+        <div id="battle-1">1.공격</div>
+        <div id="battle-2">2.회복</div>
+        <div id="battle-3">3.도망</div>
+      </div>
+      <input id="battle-input" />
+      <button id="battle-button">입력</button>
+    </form>
+    <div id="message"></div>
+    <div id="monster-stat">
+      <span id="monster-name"></span>
+      <span id="monster-hp"></span>
+      <span id="monster-att"></span>
+    </div>
   </div>
-</div>
+
 <script>
   const $startScreen = document.querySelector('#start-screen');
   const $gameMenu = document.querySelector('#game-menu');
@@ -77,17 +122,17 @@
     }
     changeScreen(screen) {
       if(screen === 'start') {
-        $startScreen.style.display = 'block';
+        $startScreen.style.display = 'flex';
         $gameMenu.style.display = 'none';
         $battleMenu.style.display = 'none';
       } else if (screen === 'game') {
         $startScreen.style.display = 'none';
-        $gameMenu.style.display = 'block';
+        $gameMenu.style.display = 'flex';
         $battleMenu.style.display = 'none';
       } else if (screen === 'battle') {
         $startScreen.style.display = 'none';
         $gameMenu.style.display = 'none';
-        $battleMenu.style.display = 'block';
+        $battleMenu.style.display = 'flex';
       }
     }
     onGameMenuInput = (event) => {
@@ -160,3 +205,5 @@
     game = new Game(name);
   });
 </script>
+</body>
+</html>
