@@ -8,20 +8,23 @@
       box-sizing: border-box;
     }
     h1 {
+      margin-top: 40px;
       text-align: center;
     }
-    form {
-      margin-top: 40px;
+    #start-screen {
       display: flex;
       justify-content: center;
     }
-    form > input {
+    #start-screen, #game-menu > form, #battle-menu > form {
+      margin-top: 40px;
+    }
+    #start-screen > input ,#game-menu > form > input, #battle-menu > form > input {
       font-size: 1.4rem;
-      width: 400px;
+      width: 300px;
       border: none;
       border-bottom: 3px solid lightblue;
     }
-    form > button {
+    #start-screen > button ,#game-menu > form > button, #battle-menu > form > button {
       color: white;
       padding: 20px;
       font-size: 1.4rem;
@@ -31,55 +34,68 @@
       border: 1px solid lightgray;
       border-radius: 4px;
     }
-    #game-menu > div {
-      font-size: 1.4rem;
-      margin-right: 20px;
-    }
-    #battle-menu > div {
-      font-size: 1.4rem;
-      margin-right: 20px;
-    }
-    #hero-stat {
+    #game-menu > div, #battle-menu > div {
+      margin-top: 40px;
       font-size: 1.4rem;
       text-align: center;
+    }
+    #game-menu > form, #battle-menu > form {
+      display: flex;
+      justify-content: center;
+    }
+    #hero-stat {
+      width: 400px;
+      margin: 40px auto;
+      padding: 20px 40px;
+      border: 3px solid royalblue;
+      border-radius: 4px;
+      font-size: 1.4rem;
+      flex-flow: column;
+      justify-content: center;
+      align-items: flex-start;
+      
     }
   </style>
 </head>
 
 <body>
-  <h1>텍스트 RPG에 오신것을 환영합니다!</h1>
+  <h1>텍스트 RPG에 오신것을 환영합니다.🎉
+    <br>
+    당신의 캐릭터를 육성해보세요!
+  </h1>
   <form id="start-screen">
-    <input id="name-input" placeholder="주인공 이름을 입력하세요!" />
+    <input id="name-input" placeholder="캐릭터 이름을 입력하세요!" />
     <button id="start">시작</button>
   </form>
   <div id="screen">
-    <div id="hero-stat">
-      <span id="hero-name"></span>
-      <span id="hero-level"></span>
-      <span id="hero-hp"></span>
-      <span id="hero-xp"></span>
-      <span id="hero-att"></span>
+    <div id="hero-stat" style="display: none;">
+      <div id="hero-name"></div>
+      <div id="hero-level"></div>
+      <div id="hero-hp"></div>
+      <div id="hero-xp"></div>
+      <div id="hero-att"></div>
     </div>
     
-    <form id="game-menu" style="display: none;">
-      <div>
-        <div id="menu-1">1.모험</div>
-        <div id="menu-2">2.휴식</div>
-        <div id="menu-3">3.종료</div>
-      </div>
-      <input id="menu-input" />
-      <button id="menu-button">입력</button>
-    </form>
+    <div id="game-menu" style="display: none;">
+      <div id="menu-1">1.모험</div>
+      <div id="menu-2">2.휴식</div>
+      <div id="menu-3">3.종료</div>
+      <form>
+        <input id="menu-input" />
+        <button id="menu-button">입력</button>
+      </form>
+    </div>
 
-    <form id="battle-menu" style="display: none;">
-      <div>
-        <div id="battle-1">1.공격</div>
-        <div id="battle-2">2.회복</div>
-        <div id="battle-3">3.도망</div>
-      </div>
-      <input id="battle-input" />
-      <button id="battle-button">입력</button>
-    </form>
+    <div id="battle-menu" style="display: none;">
+      <div id="battle-1">1.공격</div>
+      <div id="battle-2">2.회복</div>
+      <div id="battle-3">3.도망</div>
+      <form>
+        <input id="battle-input" />
+        <button id="battle-button">입력</button>
+      </form>
+    </div>
+
     <div id="message"></div>
     <div id="monster-stat">
       <span id="monster-name"></span>
@@ -92,6 +108,7 @@
   const $startScreen = document.querySelector('#start-screen');
   const $gameMenu = document.querySelector('#game-menu');
   const $battleMenu = document.querySelector('#battle-menu');
+  const $heroStat = document.querySelector('#hero-stat');
   const $heroName = document.querySelector('#hero-name');
   const $heroLevel = document.querySelector('#hero-level');
   const $heroHp = document.querySelector('#hero-hp');
@@ -116,6 +133,7 @@
       this.start(name);
     } 
     start(name) {
+      document.querySelector('h1').style.display = 'none'
       $gameMenu.addEventListener('submit', this.onGameMenuInput);
       $battleMenu.addEventListener('submit', this.onBattleMenuInput);
       this.changeScreen('game');
@@ -126,17 +144,18 @@
     }
     changeScreen(screen) {
       if(screen === 'start') {
-        $startScreen.style.display = 'flex';
+        $startScreen.style.display = 'block';
         $gameMenu.style.display = 'none';
         $battleMenu.style.display = 'none';
       } else if (screen === 'game') {
         $startScreen.style.display = 'none';
-        $gameMenu.style.display = 'flex';
+        $gameMenu.style.display = 'block';
         $battleMenu.style.display = 'none';
+        $heroStat.style.display = 'flex';
       } else if (screen === 'battle') {
         $startScreen.style.display = 'none';
         $gameMenu.style.display = 'none';
-        $battleMenu.style.display = 'flex';
+        $battleMenu.style.display = 'block';
       }
     }
     onGameMenuInput = (event) => {
@@ -172,10 +191,10 @@
         $heroAtt.textContent = '';
         return;
       }
-      $heroName.textContent = hero.name;
-      $heroLevel.textContent = `${hero.lev}레벨`;
-      $heroHp.textContent = `HP: ${hero.hp}/${hero.maxHp}`;
-      $heroXp.textContent = `XP: ${hero.xp}/${15 * hero.lev}`;
+      $heroName.textContent = `이름: ${hero.name}`;
+      $heroLevel.textContent = `레벨: ${hero.lev}레벨`;
+      $heroHp.textContent = `HP: ${hero.hp} | MaxHP: ${hero.maxHp}`;
+      $heroXp.textContent = `XP: ${hero.xp} | MaxXP: ${15 * hero.lev}`;
       $heroAtt.textContent = `공격력: ${hero.att}`;
     }
   }
