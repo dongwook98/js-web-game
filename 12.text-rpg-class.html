@@ -161,6 +161,9 @@
         $battleMenu.style.display = 'none';
         $heroStat.style.display = 'none';
       } else if (screen === 'game') {
+        if (message.textContent.includes('전사') || message.textContent.includes('종료')) {
+          this.showMessage('');
+        }
         $startScreen.style.display = 'none';
         $gameMenu.style.display = 'block';
         $battleMenu.style.display = 'none';
@@ -189,8 +192,12 @@
         this.updateMonsterStat();
         this.showMessage(`몬스터와 마주쳤다. ${this.monster.name}인 것 같다!`);
       } else if (input === '2') { // 휴식
-
+        const { hero } = this;
+        hero.hp = hero.maxHp;
+        this.showMessage('충분히 휴식을 취해서 체력이 만땅!!');
+        this.updateHeroStat();
       } else if (input === '3') { // 종료
+        this.showMessage('게임을 종료합니다. 다시 시작하려면 캐릭터 이름을 입력해주세요.');
         this.quit();
       }
     }
