@@ -221,10 +221,25 @@
         }
         this.updateHeroStat();
         this.updateMonsterStat();
-      } else if(input === '2') { // 회복
-
-      } else if(input === '3') { // 도망
+      } else if (input === '2') { // 회복
+        const { hero, monster } = this;
+        hero.hp += 20;
+        if (hero.hp > hero.maxHp) {
+          hero.hp = hero.maxHp;
+        }
+        // hero.hp = Math.min(hero.maxHp, hero.hp + 20);
+        monster.attack(hero);
+        this.showMessage('체력을 조금 회복했다! 대신에 몬스터에게 한 대 맞았다.');
+        this.updateHeroStat();
+        if (hero.hp <= 0) {
+          this.showMessage(`${hero.lev} 레벨에서 전사. 새 주인공을 생성하세요.`);
+          this.quit();
+        }
+      } else if (input === '3') { // 도망
         this.changeScreen('game');
+        this.showMessage('휴 겨우 도망쳤다.');
+        this.monster = null;
+        this.updateMonsterStat();
       }
     }
     updateHeroStat() {
