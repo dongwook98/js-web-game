@@ -1,7 +1,8 @@
-<html lang="en">
-
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>텍스트 RPG</title>
   <style>
     * {
@@ -71,7 +72,6 @@
     }
   </style>
 </head>
-
 <body>
   <h1>텍스트 RPG에 오신것을 환영합니다.🎉
     <br>
@@ -117,7 +117,6 @@
       <span id="monster-att"></span>
     </div>
   </div>
-
 <script>
   const $startScreen = document.querySelector('#start-screen');
   const $gameMenu = document.querySelector('#game-menu');
@@ -269,22 +268,34 @@
 
   // new Hero(game1, '제로초'); -> 영웅이 어떤 게임에 속해져있는지 구분
 
-  class Hero {
-    constructor(game, name) {
-      console.log('Hero this',this)
-      this.game = game; // Game과 상호작용 // this === game.hero // game.hero.game = game;
-      // game.hero = hero도 필요하고
-      // game.hero.game = game도 있어야 서로의 객체에서 다른 것에 접근이 됩니다. 
+  class Unit {
+    constructor(game, name, hp, att, xp) {
+      this.game = game;
       this.name = name;
-      this.lev = 1;
-      this.maxHp = 100;
-      this.hp = 100;
-      this.xp = 0;
-      this.att = 10;
-      // this.game.updateHeroStat(); 이것도 가능하다. Hero 안에서 Game에 접근해서 Game의 메서드를 사용가능!(서로 엮어놔서 가능한거임)
+      this.maxHp = hp;
+      this.hp = hp;
+      this.xp = xp;
+      this.att = att;
     }
     attack(target) {
       target.hp -= this.att;
+    }
+  }
+
+  class Hero extends Unit {
+    constructor(game, name) {
+      super(game, name, 100, 10, 0); // 부모 클래스의 생성자 호출
+      this.lev = 1; // 그 외 속성
+      console.log('Hero this',this)
+      // this.game = game; // Game과 상호작용 // this === game.hero // game.hero.game = game;
+      /** game.hero = hero도 필요하고
+      / * game.hero.game = game도 있어야 서로의 객체에서 다른 것에 접근이 됩니다. 
+      */
+      // this.game.updateHeroStat(); 이것도 가능하다. Hero 안에서 Game에 접근해서 Game의 메서드를 사용가능!(서로 엮어놔서 가능한거임)
+    }
+    attack(target) {
+      super.attack(target); // 부모 클래스의 attack
+      console.log('Hero가 몬스터에게 공격'); // 부모 클래스 attack 외의 동작
     }
     heal(monster) {
       this.hp += 20;
@@ -304,17 +315,13 @@
     }
   }
 
-  class Monster {
+  class Monster extends Unit {
     constructor(game, name, hp, att, xp) {
-      this.game = game;
-      this.name = name;
-      this.maxHp = hp;
-      this.hp = hp;
-      this.xp = xp;
-      this.att = att;
+      super(game, name, hp, att, xp);
     }
     attack(target) {
-      target.hp -= this.att;
+      super.attack(target);
+      console.log('몬스터가 Hero에게 공격');
     }
   }
 
