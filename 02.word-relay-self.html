@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -8,7 +7,6 @@
   <title>쿵쿵따</title>
   <style></style>
 </head>
-
 <body>
   <h1 style="text-align: center">쿵쿵따 게임</h1>
   <h2 id="refresh" style="display: none; text-align: center;">게임을 다시 시작하고 싶으시다면 새로고침 해주세요 :)</h2>
@@ -60,67 +58,65 @@
       </form>
     </div>
   </div>
+<script>
+  const number = Number(prompt('몇 명이 참가하시나요?')); // 참가자 수를 저장할 변수
 
-  <script>
-    const number = Number(prompt('몇 명이 참가하시나요?')); // 참가자 수를 저장할 변수
+  if (number > 0) { // 음수 입력 방지
+    const $input = document.querySelector('input');
+    const $button = document.querySelector('button');
+    const $word = document.querySelector('#word');
+    const $order = document.querySelector('#order');
+    const $number = document.querySelector('#number');
+    const $form = document.querySelector('form');
+    let word; // 제시어
+    let newWord; // 현재 단어
 
-    if (number > 0) { // 음수 입력 방지
-      const $input = document.querySelector('input');
-      const $button = document.querySelector('button');
-      const $word = document.querySelector('#word');
-      const $order = document.querySelector('#order');
-      const $number = document.querySelector('#number');
-      const $form = document.querySelector('form');
-      let word; // 제시어
-      let newWord; // 현재 단어
+    document.querySelector('#view').style.visibility = 'visible';
+    $number.textContent = `${number}`;
 
-      document.querySelector('#view').style.visibility = 'visible';
-      $number.textContent = `${number}`;
-
-      // word == undefined == false
-      // !word == true
-      // 제시어가 있으면 !word는 false가 된다. 
-      // 제시어가 없으면 !word는 true가 된다.
-      const onClickButton = () => {
-        if (newWord.length === 3 && (!word || word[word.length - 1] === newWord[0])) { // 입력어가 세글자이고 제시어가 비어있는가 또는 입력한 단어가 올바른가?
-          word = newWord;
-          $word.textContent = word;
-          const order = Number($order.textContent);
-          if (order + 1 > number) { // 3번참가자의 순서일 경우 다음순서가 1번으로 가야한다.
-            $order.textContent = 1;
-          } else {
-            $order.textContent = order + 1;
-          }
-        } else { // 입력어가 세글자가 아닌경우, 제시어가 올바르지 않은 경우, 제시어가 이미 있는 경우
-          if (newWord.length !== 3) {
-            alert('제시어는 세 글자여야합니다.')
-          } else {
-            alert('올바르지 않은 단어입니다!');
-          }
+    // word == undefined == false
+    // !word == true
+    // 제시어가 있으면 !word는 false가 된다. 
+    // 제시어가 없으면 !word는 true가 된다.
+    const onClickButton = () => {
+      if (newWord.length === 3 && (!word || word[word.length - 1] === newWord[0])) { // 입력어가 세글자이고 제시어가 비어있는가 또는 입력한 단어가 올바른가?
+        word = newWord;
+        $word.textContent = word;
+        const order = Number($order.textContent);
+        if (order + 1 > number) { // 3번참가자의 순서일 경우 다음순서가 1번으로 가야한다.
+          $order.textContent = 1;
+        } else {
+          $order.textContent = order + 1;
         }
-        $input.value = '';
-        $input.focus();
-      };
-
-      const onInput = (e) => {
-        newWord = e.target.value;
-      };
-
-      // 이벤트 리스너 설정
-      $input.addEventListener('input', onInput);
-      $button.addEventListener('click', onClickButton);
-      $form.addEventListener('submit', (e) => {
-        e.preventDefault();
-      });
-    } else { // prompt 취소 누르면 null 반환
-      if (number === 0) { // Number(null) === 0
-        alert('0을 입력하셨거나 취소를 누르셨군요. \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요!!')
-      } else {
-        alert('숫자(양수)만 입력해주세요! \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요 :)');
-        document.querySelector('#refresh').style.display = 'block'
+      } else { // 입력어가 세글자가 아닌경우, 제시어가 올바르지 않은 경우, 제시어가 이미 있는 경우
+        if (newWord.length !== 3) {
+          alert('제시어는 세 글자여야합니다.')
+        } else {
+          alert('올바르지 않은 단어입니다!');
+        }
       }
-    }
-  </script>
-</body>
+      $input.value = '';
+      $input.focus();
+    };
 
+    const onInput = (e) => {
+      newWord = e.target.value;
+    };
+
+    // 이벤트 리스너 설정
+    $input.addEventListener('input', onInput);
+    $button.addEventListener('click', onClickButton);
+    $form.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  } else { // prompt 취소 누르면 null 반환
+    if (number === 0) { // Number(null) === 0
+      alert('0을 입력하셨거나 취소를 누르셨군요. \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요!!')
+    } else {
+      alert('숫자(양수)만 입력해주세요! \n게임을 다시 시작하고 싶으시다면 새로고침 해주세요 :)');
+      document.querySelector('#refresh').style.display = 'block'
+    }
+  }
+</script>
+</body>
 </html>
