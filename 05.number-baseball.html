@@ -1,219 +1,219 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>숫자 야구</title>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>숫자 야구</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-      html, body {
-        margin: 0;
-        padding: 0;
-      }
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
 
-      #center {
-        display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;
-      }
+    #center {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-      #game-rule, #game-example {
-        margin-top: 20px;
-        padding: 20px 40px;
-        line-height: 2rem;
-      }
+    #game-rule, #game-example {
+      margin-top: 20px;
+      padding: 20px 40px;
+      line-height: 2rem;
+    }
 
-      #game-rule {
-        border: 3px solid cornflowerblue;
-      }
+    #game-rule {
+      border: 3px solid cornflowerblue;
+    }
 
-      #game-example {
-        font-size: 1.4rem;
-        border: 3px solid darkcyan;
-        
-      }
+    #game-example {
+      font-size: 1.4rem;
+      border: 3px solid darkcyan;
+      
+    }
 
-      #form {
-        margin-top: 40px;
-        display: flex;
-      }
+    #form {
+      margin-top: 40px;
+      display: flex;
+    }
 
-      #input {
-        font-size: 1.4rem;
-        width: 600px;
-        height: 70px;
-        border: none;
-        border-bottom: 1px solid salmon;
-      }
+    #input {
+      font-size: 1.4rem;
+      width: 600px;
+      height: 70px;
+      border: none;
+      border-bottom: 1px solid salmon;
+    }
 
-      form > button {
-        margin-left: 15px;
-        width: 100px;
-        font-size: 1.4rem;
-        font-weight: 600;
-        background-color: coral;
-        color: white;
-        border: none;
-        border-radius: 4px;
-      }
+    form > button {
+      margin-left: 15px;
+      width: 100px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      background-color: coral;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
 
-      form > button:hover {
-        filter: brightness(0.7);
-      }
+    form > button:hover {
+      filter: brightness(0.7);
+    }
 
-      div:nth-last-of-type(2) {
-        margin-top: 40px;
-        font-size: 1.6rem;
-        text-align: center;
-      }
+    div:nth-last-of-type(2) {
+      margin-top: 40px;
+      font-size: 1.6rem;
+      text-align: center;
+    }
 
-      #logs {
-        display: none;
-        border: 1px solid black;
-        padding: 20px 40px;
-        width: 700px;
-        font-size: 1.4rem;
-      }
+    #logs {
+      display: none;
+      border: 1px solid black;
+      padding: 20px 40px;
+      width: 700px;
+      font-size: 1.4rem;
+    }
 
-      #input-list header {
-        margin-top: 30px;
-        text-align: center;
-        font-size: 1.6rem;
-        font-weight: bolder;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="center">
-      <h1 id="title">⚾️ 숫자 야구 ⚾️</h1>
-      <h2 id="game-rule">
-        <div>⚖️ 게임 룰⚖️</div>
-        <br>
-        컴퓨터가 숫자 1~9 중에서 중복되지 않게 네 개를 고릅니다.
-        <br>
-        여러분들에게는 10번의 기회가 주어지고 컴퓨터가 고른 숫자 네 개를 맞히면 됩니다.
-        <br>
-        이때 숫자만 맞히는 것이 아니라 숫자의 순서까지 맞혀야 합니다. 기회가 적은 대신, 틀릴 때마다 힌트를 줍니다.
-        <br>
-        맞힌 숫자의 개수(볼), 숫자뿐만 아니라 순서까지 맞힌 개수(스트라이크)를 알려줍니다.
-      </h2>
-      <p id="game-example">예를 들어, 컴퓨터가 5728을 뽑았다고 가정해 봅시다. 플레이어가 7129를 말한다면, 컴퓨터는 1스트라이크, 1볼이라고 말해줍니다. 
-        <br>
-        7은 숫자만 맞혀서 볼이고, 2는 숫자에 순서(세 번째)까지 맞혀서 스트라이크입니다.
-        <br>
-        마찬가지로 플레이어가 7528을 말한다면, 2스트라이크 2볼이 되고, 7285를 말한다면 4볼이 됩니다.
-        <br>
-        5728을 말한다면 4스트라이크(홈런)가 되어 이기게 됩니다. 그리고 10번의 기회 안에 맞히지 못한다면 컴퓨터가 승리합니다. 
-        <br>
-      </p>
-      <form id="form">
-        <input type="text" id="input" />
-        <button>제출</button>
-      </form>
-      <!-- input만 써도 되나 form으로 감싸주는게 Html표준에 적합함 -->
-      <div id="input-list">
-        <header>기록 리스트</header>
-        <ul id="logs"></ul>
-      </div>
+    #input-list header {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: bolder;
+    }
+  </style>
+</head>
+<body>
+  <div id="center">
+    <h1 id="title">⚾️ 숫자 야구 ⚾️</h1>
+    <h2 id="game-rule">
+      <div>⚖️ 게임 룰⚖️</div>
+      <br>
+      컴퓨터가 숫자 1~9 중에서 중복되지 않게 네 개를 고릅니다.
+      <br>
+      여러분들에게는 10번의 기회가 주어지고 컴퓨터가 고른 숫자 네 개를 맞히면 됩니다.
+      <br>
+      이때 숫자만 맞히는 것이 아니라 숫자의 순서까지 맞혀야 합니다. 기회가 적은 대신, 틀릴 때마다 힌트를 줍니다.
+      <br>
+      맞힌 숫자의 개수(볼), 숫자뿐만 아니라 순서까지 맞힌 개수(스트라이크)를 알려줍니다.
+    </h2>
+    <p id="game-example">예를 들어, 컴퓨터가 5728을 뽑았다고 가정해 봅시다. 플레이어가 7129를 말한다면, 컴퓨터는 1스트라이크, 1볼이라고 말해줍니다. 
+      <br>
+      7은 숫자만 맞혀서 볼이고, 2는 숫자에 순서(세 번째)까지 맞혀서 스트라이크입니다.
+      <br>
+      마찬가지로 플레이어가 7528을 말한다면, 2스트라이크 2볼이 되고, 7285를 말한다면 4볼이 됩니다.
+      <br>
+      5728을 말한다면 4스트라이크(홈런)가 되어 이기게 됩니다. 그리고 10번의 기회 안에 맞히지 못한다면 컴퓨터가 승리합니다. 
+      <br>
+    </p>
+    <form id="form">
+      <input type="text" id="input" />
+      <button>제출</button>
+    </form>
+    <!-- input만 써도 되나 form으로 감싸주는게 Html표준에 적합함 -->
+    <div id="input-list">
+      <header>기록 리스트</header>
+      <ul id="logs"></ul>
     </div>
-    <script>
-      const $input = document.querySelector('#input');
-      const $form = document.querySelector('#form');
-      const $logs = document.querySelector('#logs');
+  </div>
+<script>
+  const $input = document.querySelector('#input');
+  const $form = document.querySelector('#form');
+  const $logs = document.querySelector('#logs');
 
-      const numbers = [];
-      for (let n = 0; n < 9; n += 1) {
-        numbers.push(n + 1);
-      } // 1~9까지 numbers 배열에 넣어줌
+  const numbers = [];
+  for (let n = 0; n < 9; n += 1) {
+    numbers.push(n + 1);
+  } // 1~9까지 numbers 배열에 넣어줌
 
-      const answer = []; // 중복되지않는 4개의 숫자를 저장할 변수
-      for (let n = 0; n < 4; n += 1) { // 네 번 반복
-        const index = Math.floor(Math.random() * numbers.length); // 0~8 정수
-        answer.push(numbers[index]); 
-        numbers.splice(index, 1);
+  const answer = []; // 중복되지않는 4개의 숫자를 저장할 변수
+  for (let n = 0; n < 4; n += 1) { // 네 번 반복
+    const index = Math.floor(Math.random() * numbers.length); // 0~8 정수
+    answer.push(numbers[index]); 
+    numbers.splice(index, 1);
+  }
+  console.log(answer);
+
+  const tries = []; // 유저가 입력한 값들을 기록하는 배열
+  function checkInput(input) {
+    if (input.length !== 4) { // 길이가 4가 아닌가
+      return alert('4자리 숫자를 입력해 주세요.');
+    }
+    if (new Set(input).size !== 4) { // 중복된 숫자가 있는가
+      // 입력: [3, 1, 4, 4] , new Set(input) : [3, 1, 4] 4의 중복제거 
+      return alert('중복되지 않게 입력해 주세요');
+    }
+    if (tries.includes(input)) { // 이미 시도한 값은 아닌가
+      return alert('이미 시도한 값입니다.');
+    }
+    return true;
+  } 
+
+  function defeated() {
+    const message = document.createTextNode(`😔 패배! 정답은 ${answer.join('')}`);
+    $logs.appendChild(message);
+  } // 함수로 중복 제거
+
+  let out = 0;
+  $form.addEventListener('submit', (event) => {
+    event.preventDefault(); // 기본 동작 막기
+    const value = $input.value;
+    console.log(value)
+    $input.value = '';
+    if (!checkInput(value)) { 
+      return;
+    }
+    // 이 아래로 입력값 문제없음
+    $logs.style.display = 'block';
+    if (answer.join('') === value) {
+      console.log(answer.join(''));
+      $logs.innerHTML += '<b>🎉홈런! 축하드립니다. 게임에서 승리하셨습니다!🎉</b>';
+      return;
+    }
+    // 몇 스트라이크 몇 볼인지 검사
+    let strike = 0; 
+    let ball = 0;
+    // ex) answer: 3146, value: 1234
+    for (let i = 0; i < answer.length; i++) {
+      const index = value.indexOf(answer[i]);
+      if (index > -1) { // 일치하는 숫자 발견
+        if (index === i) { // 자릿수도 같음
+          strike += 1;
+        } else { // 숫자만 같음
+          ball += 1;
+        }
       }
-      console.log(answer);
-
-      const tries = []; // 유저가 입력한 값들을 기록하는 배열
-      function checkInput(input) {
-        if (input.length !== 4) { // 길이가 4가 아닌가
-          return alert('4자리 숫자를 입력해 주세요.');
-        }
-        if (new Set(input).size !== 4) { // 중복된 숫자가 있는가
-          // 입력: [3, 1, 4, 4] , new Set(input) : [3, 1, 4] 4의 중복제거 
-          return alert('중복되지 않게 입력해 주세요');
-        }
-        if (tries.includes(input)) { // 이미 시도한 값은 아닌가
-          return alert('이미 시도한 값입니다.');
-        }
-        return true;
-      } 
-
-      function defeated() {
-        const message = document.createTextNode(`😔 패배! 정답은 ${answer.join('')}`);
-        $logs.appendChild(message);
-      } // 함수로 중복 제거
-
-      let out = 0;
-      $form.addEventListener('submit', (event) => {
-        event.preventDefault(); // 기본 동작 막기
-        const value = $input.value;
-        console.log(value)
-        $input.value = '';
-        if (!checkInput(value)) { 
-          return;
-        }
-        // 이 아래로 입력값 문제없음
-        $logs.style.display = 'block';
-        if (answer.join('') === value) {
-          console.log(answer.join(''));
-          $logs.innerHTML += '<b>🎉홈런! 축하드립니다. 게임에서 승리하셨습니다!🎉</b>';
-          return;
-        }
-        // 몇 스트라이크 몇 볼인지 검사
-        let strike = 0; 
-        let ball = 0;
-        // ex) answer: 3146, value: 1234
-        for (let i = 0; i < answer.length; i++) {
-          const index = value.indexOf(answer[i]);
-          if (index > -1) { // 일치하는 숫자 발견
-            if (index === i) { // 자릿수도 같음
-              strike += 1;
-            } else { // 숫자만 같음
-              ball += 1;
-            }
-          }
-        }
-        if (strike === 0 && ball === 0) {
-          out++;
-          let outText = document.createElement('span');
-          outText.style = 'color: red';
-          outText.textContent = '아웃'
-          $logs.append(`${value} -> ${out} `, outText, document.createElement('br'));
-        } else {
-          let strikeText = document.createElement('span');
-          strikeText.style = 'color: blue';
-          strikeText.textContent = '스트라이크'
-          let ballText = document.createElement('span');
-          ballText.style = 'color: green';
-          ballText.textContent = '볼'
-          $logs.append(`${value} -> ${strike} `, strikeText, ` ${ball} `, ballText, document.createElement('br'));
-        }
-        if (out === 3) {
-          defeated();
-          return;
-        }
-        if (tries.length >= 9) {
-          defeated();
-          return;
-        }
-        tries.push(value);
-      });
-    </script>
-  </body>
+    }
+    if (strike === 0 && ball === 0) {
+      out++;
+      let outText = document.createElement('span');
+      outText.style = 'color: red';
+      outText.textContent = '아웃'
+      $logs.append(`${value} -> ${out} `, outText, document.createElement('br'));
+    } else {
+      let strikeText = document.createElement('span');
+      strikeText.style = 'color: blue';
+      strikeText.textContent = '스트라이크'
+      let ballText = document.createElement('span');
+      ballText.style = 'color: green';
+      ballText.textContent = '볼'
+      $logs.append(`${value} -> ${strike} `, strikeText, ` ${ball} `, ballText, document.createElement('br'));
+    }
+    if (out === 3) {
+      defeated();
+      return;
+    }
+    if (tries.length >= 9) {
+      defeated();
+      return;
+    }
+    tries.push(value);
+  });
+</script>
+</body>
 </html>
