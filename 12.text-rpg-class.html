@@ -7,6 +7,9 @@
     * {
       box-sizing: border-box;
     }
+    body {
+      font-size: 16px;
+    }
     h1 {
       margin-top: 40px;
       text-align: center;
@@ -15,28 +18,33 @@
       display: flex;
       justify-content: center;
     }
+    #game-menu, #battle-menu {
+      font-size: 1.6rem;
+    }
     #start-screen, #game-menu > form, #battle-menu > form {
       margin-top: 40px;
     }
     #start-screen > input ,#game-menu > form > input, #battle-menu > form > input {
-      font-size: 1.4rem;
+      font-size: 20px;
       width: 300px;
       border: none;
       border-bottom: 3px solid lightblue;
     }
     #start-screen > button ,#game-menu > form > button, #battle-menu > form > button {
+      font-size: 1.6rem;
       color: white;
       padding: 20px;
-      font-size: 1.4rem;
       font-weight: bold;
       margin-left: 5px;
       background-color: cornflowerblue;
       border: 1px solid lightgray;
       border-radius: 4px;
     }
+    #start-screen > button:hover ,#game-menu > form > button:hover, #battle-menu > form > button:hover {
+      filter: brightness(0.7);
+    }
     #game-menu > div, #battle-menu > div {
       margin-top: 40px;
-      font-size: 1.4rem;
       text-align: center;
     }
     #game-menu > form, #battle-menu > form {
@@ -44,16 +52,22 @@
       justify-content: center;
     }
     #hero-stat {
+      font-size: 1.4rem;
       width: 400px;
       margin: 40px auto;
       padding: 20px 40px;
       border: 3px solid royalblue;
       border-radius: 4px;
-      font-size: 1.4rem;
       flex-flow: column;
       justify-content: center;
       align-items: flex-start;
-      
+    }
+    #message, #monster-stat {
+      font-size: 1.4rem;
+      text-align: center;
+    }
+    #monster-stat {
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -164,6 +178,17 @@
       if (input === '1') { // 모험
         console.log('화살표 this',this);
         this.changeScreen('battle'); // this === Game 인스턴스
+        const randomIndex = Math.floor(Math.random() * this.monsterList.length);
+        const randomMonster = this.monsterList[randomIndex];
+        this.monster = new Monster(
+          this,
+          randomMonster.name,
+          randomMonster.hp,
+          randomMonster.att,
+          randomMonster.xp,
+        );
+        this.updateMonsterStat();
+        this.showMessage(`몬스터와 마주쳤다. ${this.monster.name}인 것 같다!`);
       } else if (input === '2') { // 휴식
 
       } else if (input === '3') { // 종료
@@ -174,7 +199,12 @@
       event.preventDefault();
       const input = event.target['battle-input'].value;
       if (input === '1') { // 공격
-
+        const { hero, monster } = this;
+        hero.attack(monster);
+        monster.attack(hero);
+        this.showMessage(`${hero.att}의 데미지를 주고, ${monster.att}의 데미지를 받았다.`);
+        this.updateHeroStat();
+        this.updateMonsterStat();
       } else if(input === '2') { // 회복
 
       } else if(input === '3') { // 도망
@@ -196,6 +226,21 @@
       $heroHp.textContent = `HP: ${hero.hp} | MaxHP: ${hero.maxHp}`;
       $heroXp.textContent = `XP: ${hero.xp} | MaxXP: ${15 * hero.lev}`;
       $heroAtt.textContent = `공격력: ${hero.att}`;
+    }
+    updateMonsterStat() {
+      const { monster } = this;
+      if (monster === null) {
+        $monsterName.textContent = '';
+        $monsterHp.textContent = '';
+        $monsterAtt.textContent = '';
+        return;
+      }
+      $monsterName.textContent = monster.name;
+      $monsterHp.textContent = `HP: ${monster.hp} | MaxHP: ${monster.maxHp}`;
+      $monsterAtt.textContent = `공격력: ${monster.att}`;
+    }
+    showMessage(text) {
+      $message.textContent = text;
     }
   }
 
