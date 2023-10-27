@@ -1,16 +1,17 @@
-<html lang="en">
-
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>텍스트 RPG</title>
 </head>
-
 <body>
-<form id="start-screen">
+  <h1>미완성 작품입니다. text-rpg-class.html를 이용해주세요.</h1>
+  <form id="start-screen">
   <input id="name-input" placeholder="주인공 이름을 입력하세요!" />
   <button id="start">시작</button>
-</form>
-<div id="screen">
+  </form>
+  <div id="screen">
   <div id="hero-stat">
     <span id="hero-name"></span>
     <span id="hero-level"></span>
@@ -38,7 +39,7 @@
     <span id="monster-hp"></span>
     <span id="monster-att"></span>
   </div>
-</div>
+  </div>
 <script>
   const $startScreen = document.querySelector('#start-screen');
   const $gameMenu = document.querySelector('#game-menu');
@@ -140,3 +141,5 @@
 
   // ** text-rpg-class ** 로 재구성
 </script>
+</body>
+</html>
