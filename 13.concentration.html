@@ -75,7 +75,7 @@
       }
     }
 
-    function createCard(i) { // .card > .card-inner > (.card-front + .card-back)
+    function createCard(i) { // div.card > div.card-inner > (div.card-front + div.card-back)
       const card = document.createElement('div');
       card.className = 'card' // .card 태그 생성
       const cardInner = document.createElement('div');
@@ -91,6 +91,10 @@
       return card;
     }
 
+    // 2,5,8,9 연달아 클릭했을 때
+    // clicked: [2, 5, 8, 9]
+    // 태스크큐: setTimeout500
+    // 백: addEventListener(12), 
     function onClickCard() {
       if (!clickable || completed.includes(this) || clicked[0] === this) {
         return;
