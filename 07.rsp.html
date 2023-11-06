@@ -140,7 +140,7 @@
       const diff = myScore - computerScore;
       
       let message;
-      // 2, -1은 승리조건이고, -2, 1은 패배조건, 점수표 참고
+      // 2, -1은 승리조건이고, -2, 1은 패배조건, 위 점수표 참고
       if ([2, -1].includes(diff)) {
         me += 1;
         message = '승리';
@@ -150,13 +150,12 @@
       } else {
         message = '무승부';
       }
-      if(me >= 3) {
+      if (me >= 3) {
         $score.textContent = `🎉 나의 승리 ${me}:${computer}`;
       } else if (computer >= 3) {
         $score.textContent = `😔 컴퓨터의 승리 ${me}:${computer}`;
       } else {
-        $score.textContent = `${message} 나의 점수:${me}, 
-        컴퓨터의 점수:${computer}`
+        $score.textContent = `${message} 나의 점수:${me}, 컴퓨터의 점수:${computer}`
         setTimeout(() => {
         clickable = true;
         intervalId = setInterval(changeComputerHand, 50);
