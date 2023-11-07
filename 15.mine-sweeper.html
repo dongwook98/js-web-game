@@ -103,10 +103,13 @@
       // 화면 초기화
       $tbody.innerHTML = '';
       $timer.textContent = '0초'
-      drawTable();
       // 초기화
       clearInterval(interval);
       openCount = 0;
+      firstClick = true;
+      normalCellFound = false;
+      searched = null;
+      drawTable();
       startTime = new Date();
       interval = setInterval(() => {
         const time = Math.floor((new Date() - startTime) / 1000);
@@ -204,11 +207,50 @@
       }, 0);
     }
 
+    let normalCellFound = false;
+    let searched;
+    function transferMine(rI, cI) {
+      if (normalCellFound) return; // 주변 칸에서 이미 빈칸을 찾았으면 종료
+      if (rI < 0 || rI >= row || cI < 0 || cI >= cell) return;
+      if (searched[rI][cI]) return; // 이미 찾은 칸이면 종료(무한 반복 해결)
+      if (tableData[rI][cI] === CODE.NORMAL) { // 빈칸인 경우
+        normalCellFound = true; // 주변 칸에서 찾음!
+        tableData[rI][cI] = CODE.MINE; // 빈칸 찾았으니 지뢰 심기
+      } else { // 지뢰 칸인 경우 8방향 탐색
+        searched[rI][cI] = true;
+        transferMine(rI - 1, cI - 1);
+        transferMine(rI - 1, cI);
+        transferMine(rI - 1, cI + 1);
+        transferMine(rI, cI - 1);
+        transferMine(rI, cI + 1);
+        transferMine(rI + 1, cI - 1);
+        transferMine(rI + 1, cI);
+        transferMine(rI + 1, cI + 1);
+      }
+    }
+
+    let firstClick = true;
     function onLeftClick(e) {
       const target = e.target;
       const rowIndex = target.parentNode.rowIndex;
       const cellIndex = target.cellIndex;
-      const clickedCellData = tableData[rowIndex][cellIndex];
+      let clickedCellData = tableData[rowIndex][cellIndex];
+
+      // 첫번째 클릭 일 때
+      if (firstClick) {
+        firstClick = false;
+        searched = Array(row).fill().map(() => []);
+        if (clickedCellData === CODE.MINE) { // 첫 클릭이 지뢰면
+          transferMine(rowIndex, cellIndex);
+          tableData[rowIndex][cellIndex] = CODE.NORMAL; // 지금 칸을 빈칸으로
+          clickedCellData = CODE.NORMAL; // CODE.NORMAL로 바꿔야 아래 if 문 실행됨
+        }
+      }
+
+      // 클릭한게 지뢰X 일 때
+      if (clickedCellData === CODE.NORMAL) {
+        openAround(rowIndex, cellIndex);
+      }
 
       // 클릭한게 지뢰 일 때
       if (clickedCellData === CODE.MINE) {
@@ -220,11 +262,6 @@
         }, 50);
         $tbody.removeEventListener('contextmenu', onRightClick);
         $tbody.removeEventListener('click', onLeftClick);
-      }
-
-      // 클릭한게 지뢰X 일 때
-      if (clickedCellData === CODE.NORMAL) {
-        openAround(rowIndex, cellIndex);
       }
     }
 
