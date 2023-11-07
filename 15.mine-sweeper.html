@@ -102,6 +102,35 @@
       mines.includes(tableData[rowIndex + 1]?.[cellIndex + 1]) && mineCount++;
       return mineCount;
     }
+
+    function open(rowIndex, cellIndex) {
+      if (tableData[rowIndex]?.[cellIndex] >= CODE.OPENED) return; // 한 번 열었던 칸 다시 열지않게
+      const target = $tbody.children[rowIndex]?.children[cellIndex];
+      if (!target) return;
+      console.log($tbody.ch)
+      const mineCount = countMine(rowIndex, cellIndex);
+      target.textContent = mineCount ?? '';
+      target.className = 'opened';
+      tableData[rowIndex][cellIndex] = mineCount;
+      return mineCount;
+    }
+
+    function openAround(rI, cI) {
+      setTimeout(() => { // maximum callstack exceeded 해결
+        const mineCount = open(rI, cI);
+        if (mineCount === 0) {
+          openAround(rI - 1, cI - 1);
+          openAround(rI - 1, cI);
+          openAround(rI - 1, cI + 1);
+          openAround(rI, cI - 1);
+          openAround(rI, cI + 1);
+          openAround(rI + 1, cI - 1);
+          openAround(rI + 1, cI);
+          openAround(rI + 1, cI + 1);
+        }
+      }, 0);
+    }
+
     function onLeftClick(e) {
       const target = e.target;
       const rowIndex = target.parentNode.rowIndex;
@@ -118,12 +147,10 @@
         $tbody.removeEventListener('click', onLeftClick);
       }
       if (clikedCellData === CODE.NORMAL) {
-        const mineCount = countMine(rowIndex, cellIndex);
-        target.textContent = mineCount ?? '';
-        target.className = 'opened';
-        tableData[rowIndex][cellIndex] = mineCount;
+        openAround(rowIndex, cellIndex);
       }
     }
+
     function onRightClick(e) {
       e.preventDefault();
       const target = e.target;
