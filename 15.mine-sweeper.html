@@ -10,6 +10,11 @@
       margin: 0 auto;
     }
 
+    #timer {
+      text-align: center;
+      font-size: 2rem;
+    }
+
     td {
       border: 1px solid #bbb;
       text-align: center;
@@ -59,7 +64,7 @@
     let openCount = 0;
     let startTime = new Date();
     const interval = setInterval(() => {
-      const time = Math.floor(new Date() - startTime / 1000);
+      const time = Math.floor((new Date() - startTime) / 1000);
       $timer.textContent = `${time}초`;
     }, 1000)
 
