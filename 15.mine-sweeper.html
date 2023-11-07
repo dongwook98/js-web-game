@@ -34,11 +34,13 @@
 </head>
 
 <body>
+  <div id="timer">0초</div>
   <table id="table">
     <tbody></tbody>
   </table>
   <div id="result"></div>
   <script>
+    const $timer = document.querySelector('#timer');
     const $tbody = document.querySelector('#table tbody');
     const $result = document.querySelector('#result');
     const row = 10;
@@ -54,6 +56,12 @@
       OPENED: 0, // 0 이상이면 모두 열린 칸   
     }
     let tableData;
+    let openCount = 0;
+    let startTime = new Date();
+    const interval = setInterval(() => {
+      const time = Math.floor(new Date() - startTime / 1000);
+      $timer.textContent = `${time}초`;
+    }, 1000)
 
     // 지뢰 인덱스 랜덤하게 뽑고 tableData에 지뢰 넣어주고 tableData를 리턴하는 함수
     function plantMine() { // 지뢰 심기
@@ -92,7 +100,7 @@
     function countMine(rowIndex, cellIndex) {
       const mines = [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE];
       let mineCount = 0;
-      mines.includes(tableData[rowIndex - 1]?.[cellIndex - 1]) && mineCount++;
+      mines.includes(tableData[rowIndex - 1]?.[cellIndex - 1]) && mineCount++; // 클릭 칸 기준 대각선왼쪽에 지뢰가 있다면 mineCount+1
       mines.includes(tableData[rowIndex - 1]?.[cellIndex]) && mineCount++;
       mines.includes(tableData[rowIndex - 1]?.[cellIndex + 1]) && mineCount++;
       mines.includes(tableData[rowIndex][cellIndex - 1]) && mineCount++;
@@ -104,14 +112,23 @@
     }
 
     function open(rowIndex, cellIndex) {
-      if (tableData[rowIndex]?.[cellIndex] >= CODE.OPENED) return; // 한 번 열었던 칸 다시 열지않게
+      if (tableData[rowIndex]?.[cellIndex] >= CODE.OPENED) return; // 한 번 열었던 칸 다시 열지않게(openAround무한반복 해결)
       const target = $tbody.children[rowIndex]?.children[cellIndex];
       if (!target) return;
-      console.log($tbody.ch)
       const mineCount = countMine(rowIndex, cellIndex);
       target.textContent = mineCount ?? '';
       target.className = 'opened';
       tableData[rowIndex][cellIndex] = mineCount;
+      openCount++;
+      if (openCount === row * cell - mine) { // 승리 하면
+        const time = (new Date() - startTime) / 1000;
+        clearInterval(interval);
+        $tbody.removeEventListener('contextmenu', onRightClick);
+        $tbody.removeEventListener('click', onLeftClick);
+        setTimeout(() => {
+          alert(`승리! ${time}초 소요`);
+        }, 50)
+      }
       return mineCount;
     }
 
@@ -140,6 +157,7 @@
       if (clikedCellData === CODE.MINE) {
         target.textContent = '💣';
         target.className = 'opened';
+        clearInterval(interval);
         setTimeout(() => {
           alert('패배! 새로고침하여 다시 시작해주세요.')
         }, 50);
