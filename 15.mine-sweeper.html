@@ -39,18 +39,25 @@
 </head>
 
 <body>
+  <form id="form">
+    <input placeholder="가로 줄" id="row" size="5">
+    <input placeholder="세로 줄" id="cell" size="5">
+    <input placeholder="지뢰" id="mine" size="5">
+    <button>생성</button>
+  </form>
   <div id="timer">0초</div>
   <table id="table">
     <tbody></tbody>
   </table>
   <div id="result"></div>
   <script>
+    const $form = document.querySelector('#form');
     const $timer = document.querySelector('#timer');
     const $tbody = document.querySelector('#table tbody');
     const $result = document.querySelector('#result');
-    const row = 10;
-    const cell = 10;
-    const mine = 10;
+    let row;
+    let cell;
+    let mine;
     const CODE = {
       NORMAL: -1, // 뒤집힌칸(지뢰x)
       QUESTION: -2,
@@ -61,26 +68,44 @@
       OPENED: 0, // 0 이상이면 모두 열린 칸   
     }
     let tableData;
-    let openCount = 0;
-    let startTime = new Date();
-    const interval = setInterval(() => {
-      const time = Math.floor((new Date() - startTime) / 1000);
-      $timer.textContent = `${time}초`;
-    }, 1000)
+    let openCount;
+    let startTime;
+    let interval;
+    const dev = true; // 개발모드 관리 변수
 
-    // 지뢰 인덱스 랜덤하게 뽑고 tableData에 지뢰 넣어주고 tableData를 리턴하는 함수
+    function onSubmit(e) {
+      e.preventDefault();
+      // 게임 설정
+      row = parseInt(e.target.row.value);
+      cell = parseInt(e.target.cell.value);
+      mine = parseInt(e.target.mine.value);
+      // 화면 초기화
+      $tbody.innerHTML = '';
+      $timer.textContent = '0초'
+      drawTable();
+      // 초기화
+      clearInterval(interval);
+      openCount = 0;
+      startTime = new Date();
+      interval = setInterval(() => {
+        const time = Math.floor((new Date() - startTime) / 1000);
+        $timer.textContent = `${time}초`;
+      }, 1000)
+    }
+    $form.addEventListener('submit', onSubmit);
+
+    // 랜덤하게 지뢰인덱스 n개뽑아서 tableData에 넣고 tableData 리턴하는 함수
     function plantMine() { // 지뢰 심기
       // 지뢰 인덱스 후보들 배열만들기
       const mineIndexCandidates = Array(row * cell).fill().map((cell, i) => i); // [0,1,2,...,99]
       const minesIndex = [];
-      // 지뢰 인덱스 10개 뽑기
+      // 지뢰 인덱스 n개 뽑기
       while (mineIndexCandidates.length > row * cell - mine) {
-        // 0~100미만 랜덤숫자 인덱스 뽑고 뽑은 배열 요소 꺼내기
+        // 0~n미만 랜덤숫자 인덱스 뽑고 뽑은 배열 요소 꺼내기
         const mineChosen = mineIndexCandidates.splice(Math.floor(Math.random() * mineIndexCandidates.length), 1)[0];
         // 위에서 뽑은 요소 지뢰들인덱스 배열에 넣기
         minesIndex.push(mineChosen);
       }
-      console.log(mineIndexCandidates, minesIndex);
 
       // table의 data만들기 [[...], [...], [...], [], ...] 2차원배열 구조
       const tableData = [];
@@ -91,7 +116,6 @@
           rowData.push(CODE.NORMAL);
         }
       }
-      console.log(tableData)
 
       // [16, 57, 65, ...] 라면 
       for (let k = 0; k < minesIndex.length; k++) {
@@ -102,6 +126,7 @@
       return tableData;
     }
 
+    // 클릭한 칸 주변 지뢰 개수 세는 함수
     function countMine(rowIndex, cellIndex) {
       const mines = [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE];
       let mineCount = 0;
@@ -117,15 +142,19 @@
     }
 
     function open(rowIndex, cellIndex) {
-      if (tableData[rowIndex]?.[cellIndex] >= CODE.OPENED) return; // 한 번 열었던 칸 다시 열지않게(openAround무한반복 해결)
+      // 한 번 열었던 칸 다시 열지않게 return(openAround 무한 반복 해결)
+      if (tableData[rowIndex]?.[cellIndex] >= CODE.OPENED) return;
       const target = $tbody.children[rowIndex]?.children[cellIndex];
+      // [-1, -1] 막기
       if (!target) return;
-      const mineCount = countMine(rowIndex, cellIndex);
-      target.textContent = mineCount ?? '';
+      const mineNumber = countMine(rowIndex, cellIndex);
+      target.textContent = mineNumber ?? '';
       target.className = 'opened';
-      tableData[rowIndex][cellIndex] = mineCount;
+      tableData[rowIndex][cellIndex] = mineNumber;
       openCount++;
-      if (openCount === row * cell - mine) { // 승리 하면
+
+      // 승리
+      if (openCount === row * cell - mine) {
         const time = (new Date() - startTime) / 1000;
         clearInterval(interval);
         $tbody.removeEventListener('contextmenu', onRightClick);
@@ -134,13 +163,14 @@
           alert(`승리! ${time}초 소요`);
         }, 50)
       }
-      return mineCount;
+      return mineNumber;
     }
 
+    // 주변 칸 여는 함수(재귀)
     function openAround(rI, cI) {
       setTimeout(() => { // maximum callstack exceeded 해결
-        const mineCount = open(rI, cI);
-        if (mineCount === 0) {
+        const mineNumber = open(rI, cI);
+        if (mineNumber === 0) {
           openAround(rI - 1, cI - 1);
           openAround(rI - 1, cI);
           openAround(rI - 1, cI + 1);
@@ -157,19 +187,22 @@
       const target = e.target;
       const rowIndex = target.parentNode.rowIndex;
       const cellIndex = target.cellIndex;
-      const clikedCellData = tableData[rowIndex][cellIndex];
-      console.log(clikedCellData);
-      if (clikedCellData === CODE.MINE) {
+      const clickedCellData = tableData[rowIndex][cellIndex];
+
+      // 클릭한게 지뢰 일 때
+      if (clickedCellData === CODE.MINE) {
         target.textContent = '💣';
         target.className = 'opened';
         clearInterval(interval);
         setTimeout(() => {
-          alert('패배! 새로고침하여 다시 시작해주세요.')
+          alert('패배! 다시 도전해보세요.');
         }, 50);
         $tbody.removeEventListener('contextmenu', onRightClick);
         $tbody.removeEventListener('click', onLeftClick);
       }
-      if (clikedCellData === CODE.NORMAL) {
+
+      // 클릭한게 지뢰X 일 때
+      if (clickedCellData === CODE.NORMAL) {
         openAround(rowIndex, cellIndex);
       }
     }
@@ -179,35 +212,35 @@
       const target = e.target;
       const rowIndex = target.parentNode.rowIndex;
       const cellIndex = target.cellIndex;
-      let cellData = tableData[rowIndex][cellIndex];
-      if (cellData === CODE.MINE) {
+      const clickedCellData = tableData[rowIndex][cellIndex];
+      if (clickedCellData === CODE.MINE) { // 지뢰를 우클릭하면
         tableData[rowIndex][cellIndex] = CODE.QUESTION_MINE; // 물음표 지뢰로
         target.className = 'question';
         target.textContent = '❓';
-      } else if (cellData === CODE.QUESTION_MINE) {
-        tableData[rowIndex][cellIndex] = CODE.FLAG_MINE;
+      } else if (clickedCellData === CODE.QUESTION_MINE) { // 물음표 지뢰를 우클릭하면
+        tableData[rowIndex][cellIndex] = CODE.FLAG_MINE; // 깃발 지뢰로
         target.className = 'flag';
         target.textContent = '⛳️';
-      } else if (cellData === CODE.FLAG_MINE) {
-        tableData[rowIndex][cellIndex] = CODE.MINE;
+      } else if (clickedCellData === CODE.FLAG_MINE) { // 깃발 지뢰를 우클릭하면
+        tableData[rowIndex][cellIndex] = CODE.MINE; // 지뢰로
         target.className = '';
-        target.textContent = 'X';
-      } else if (cellData === CODE.NORMAL) {
-        tableData[rowIndex][cellIndex] = CODE.QUESTION;
+        dev && (target.textContent = 'X');
+      } else if (clickedCellData === CODE.NORMAL) { // 지뢰X를 우클릭하면
+        tableData[rowIndex][cellIndex] = CODE.QUESTION; // 물음표로
         target.className = 'question';
         target.textContent = '❓'
-      } else if (cellData === CODE.QUESTION) {
-        tableData[rowIndex][cellIndex] = CODE.FLAG;
+      } else if (clickedCellData === CODE.QUESTION) { // 물음표를 우클릭하면
+        tableData[rowIndex][cellIndex] = CODE.FLAG; // 깃발로
         target.className = 'flag';
         target.textContent = '⛳️';
-      } else if (cellData === CODE.FLAG) {
-        tableData[rowIndex][cellIndex] = CODE.NORMAL;
+      } else if (clickedCellData === CODE.FLAG) { // 깃발을 우클릭하면 
+        tableData[rowIndex][cellIndex] = CODE.NORMAL; // 지뢰X로
         target.className = '';
         target.textContent = '';
       }
     }
 
-    function drawTable() { // 표 그리기
+    function drawTable() {
       tableData = plantMine();
       tableData.forEach((row) => {
         const $tr = document.createElement('tr');
@@ -215,7 +248,7 @@
           const $td = document.createElement('td');
           $tr.append($td);
           if (cell === CODE.MINE) {
-            $td.textContent = 'X'; // 개발 편의 위해 잠시
+            dev && ($td.textContent = 'X'); // 개발 편의 위해 잠시
           }
         })
         $tbody.append($tr);
@@ -223,7 +256,6 @@
         $tbody.addEventListener('click', onLeftClick);
       })
     }
-    drawTable();
   </script>
 </body>
 
