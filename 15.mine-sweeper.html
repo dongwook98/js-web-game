@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>지뢰 찾기</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    td {
+      border: 1px solid #bbb;
+      text-align: center;
+      line-height: 20px;
+      width: 30px;
+      height: 30px;
+      background: #888;
+    }
+
+    td.opened {
+      background: white;
+    }
+
+    td.flag {
+      background: red;
+    }
+
+    td.question {
+      background: orange;
+    }
+  </style>
+</head>
+
+<body>
+  <table id="table">
+    <tbody></tbody>
+  </table>
+  <div id="result"></div>
+  <script>
+    const $tbody = document.querySelector('#table tbody');
+    const $result = document.querySelector('#result');
+    const row = 10;
+    const cell = 10;
+    const mine = 10;
+    const CODE = {
+      NORMAL: -1,
+      QUESTION: -2,
+      FLAG: -3,
+      QUESTION_MINE: -4,
+      FLAG_MINE: -5,
+      MINE: -6,
+      OPENED: 0, // 0 이상이면 모두 열린 칸   
+    }
+    let tableData;
+
+    // 지뢰 인덱스 랜덤하게 뽑고 tableData에 지뢰 넣어주고 tableData를 리턴하는 함수
+    function plantMine() { // 지뢰 심기
+      // 지뢰 인덱스 후보들 배열만들기
+      const mineIndexCandidates = Array(row * cell).fill().map((cell, i) => i); // [0,1,2,...,99]
+      const minesIndex = [];
+      // 지뢰 인덱스 10개 뽑기
+      while (mineIndexCandidates.length > row * cell - mine) {
+        // 0~100미만 랜덤숫자 인덱스 뽑고 뽑은 배열 요소 꺼내기
+        const mineChosen = mineIndexCandidates.splice(Math.floor(Math.random() * mineIndexCandidates.length), 1)[0];
+        // 위에서 뽑은 요소 지뢰들인덱스 배열에 넣기
+        minesIndex.push(mineChosen);
+      }
+      console.log(mineIndexCandidates, minesIndex);
+
+      // table의 data만들기 [[...], [...], [...], [], ...] 2차원배열 구조
+      const tableData = [];
+      for (let i = 0; i < row; i++) {
+        const rowData = [];
+        tableData.push(rowData);
+        for (let j = 0; j < cell; j++) {
+          rowData.push(CODE.NORMAL);
+        }
+      }
+      console.log(tableData)
+
+      // [16, 57, 65, ...] 라면 
+      for (let k = 0; k < minesIndex.length; k++) {
+        const verIndex = Math.floor(minesIndex[k] / cell); // 16이라면 가로인덱스 1
+        const horIndex = minesIndex[k] % cell; // 16이라면 세로인덱스 6
+        tableData[verIndex][horIndex] = CODE.MINE; // 지뢰인덱스 위치에 지뢰데이터(-6) 표시
+      }
+      return tableData;
+    }
+
+    function drawTable() { // 표 그리기
+      tableData = plantMine();
+      tableData.forEach((row) => {
+        const $tr = document.createElement('tr');
+        row.forEach((cell) => {
+          const $td = document.createElement('td');
+          $tr.append($td);
+          if (cell === CODE.MINE) {
+            $td.textContent = 'X';
+          }
+        })
+        $tbody.append($tr);
+      })
+    }
+    drawTable();
+  </script>
+</body>
+
+</html>
