@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -10,26 +11,31 @@
       width: 165px;
       height: 200px;
     }
+
     h1 {
       text-align: center;
     }
+
     #game-explain {
       font-size: 1.3rem;
       text-align: center;
     }
+
     #main {
       display: flex;
       flex-flow: column;
       justify-content: center;
       align-items: center;
     }
+
     #main div:nth-of-type(2) {
       margin-top: 20px;
       display: flex;
       justify-content: space-evenly;
       width: 500px;
     }
-    #main div:nth-of-type(2) > button {
+
+    #main div:nth-of-type(2)>button {
       font-size: 1.4rem;
       font-weight: bolder;
       color: white;
@@ -37,33 +43,42 @@
       padding: 20px;
       border-radius: 4px;
       border: 1px solid lightblue;
-      
+
     }
-    #main div:nth-of-type(2) > button:nth-child(1) {
+
+    #main div:nth-of-type(2)>button:nth-child(1) {
       background-color: red;
     }
-    #main div:nth-of-type(2) > button:nth-child(2) {
+
+    #main div:nth-of-type(2)>button:nth-child(2) {
       background-color: blue;
     }
-    #main div:nth-of-type(2) > button:nth-child(3) {
+
+    #main div:nth-of-type(2)>button:nth-child(3) {
       background-color: green;
     }
-    #main div:nth-of-type(2) > button:hover {
-     filter: brightness(0.7);
+
+    #main div:nth-of-type(2)>button:hover {
+      filter: brightness(0.7);
     }
-    #main div:nth-of-type(3), #main div:nth-of-type(4) {
+
+    #main div:nth-of-type(3),
+    #main div:nth-of-type(4) {
       font-weight: bold;
     }
+
     #main div:nth-of-type(3) {
       margin-top: 60px;
       font-size: 2rem;
     }
+
     #main div:nth-of-type(4) {
       margin-top: 10px;
       font-size: 1.6rem;
     }
   </style>
 </head>
+
 <body>
   <h1>가위바위보</h1>
   <p id="game-explain">승리하게 되면 1점, 패배하게 되면 컴퓨터가 1점, 무승부면 0점을 획득합니다.
@@ -80,92 +95,93 @@
     <div>점수</div>
     <div id="score">0</div>
   </div>
-<script>
-  const $computer = document.querySelector('#computer');
-  const $score = document.querySelector('#score');
-  const $rock = document.querySelector('#rock');
-  const $scissors = document.querySelector('#scissors');
-  const $paper = document.querySelector('#paper');
-  const IMG_URL = './rsp.png';
-  $computer.style.background = `url(${IMG_URL}) 0 0`;
-  $computer.style.backgroundSize = 'auto 200px';
+  <script>
+    const $computer = document.querySelector('#computer');
+    const $score = document.querySelector('#score');
+    const $rock = document.querySelector('#rock');
+    const $scissors = document.querySelector('#scissors');
+    const $paper = document.querySelector('#paper');
+    const IMG_URL = './rsp.png';
+    $computer.style.background = `url(${IMG_URL}) 0 0`;
+    $computer.style.backgroundSize = 'auto 200px';
 
-  const rspX = {
-    scissors: '0', 
-    rock: '-220px',
-    paper: '-440px',
-  }
-
-  let computerChoice = 'scissors'
-
-  const changeComputerHand = () => {
-    if(computerChoice === 'scissors') { // 가위면
-      computerChoice = 'rock'; 
-    } else if (computerChoice === 'rock') { // 바위면
-      computerChoice = 'paper';
-    } else if (computerChoice === 'paper'){ // 보자기면
-      computerChoice = 'scissors';
+    const rspX = {
+      scissors: '0',
+      rock: '-220px',
+      paper: '-440px',
     }
-    $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
-    $computer.style.backgroundSize = 'auto 200px'; 
-  }
-  let intervalId = setInterval(changeComputerHand, 50);
 
-  // 가위: 1,  바위: 0,   보: -1
-  // 나\컴퓨터  가위    바위       보
-  // 가위       0       1       2
-  // 바위      -1       0       1
-  // 보        -2      -1      0
-  const scoreTable = {
-    rock: 0,
-    scissors: 1,
-    paper: -1,
-  };
+    let computerChoice = 'scissors'
 
-  let clickable = true; // 버그해결 3번째 방법. 플래그 변수 사용하기
-  let computer = 0;
-  let me = 0;
-  const clickButton = (event) => {
-    if (clickable) {
-      clearInterval(intervalId);
-      clickable = false;
-      // 점수 계산 및 화면 표시
-      const myChoice = event.target.textContent === '바위'
-      ? 'rock' 
-      : event.target.textContent === '가위'
-        ? 'scissors' 
-        : 'paper'; 
-      const myScore = scoreTable[myChoice];
-      const computerScore = scoreTable[computerChoice];
-      const diff = myScore - computerScore;
-      
-      let message;
-      // 2, -1은 승리조건이고, -2, 1은 패배조건, 위 점수표 참고
-      if ([2, -1].includes(diff)) {
-        me += 1;
-        message = '승리';
-      } else if ([-2, 1].includes(diff)) {
-        computer += 1;
-        message = '패배';
-      } else {
-        message = '무승부';
+    const changeComputerHand = () => {
+      if (computerChoice === 'scissors') { // 가위면
+        computerChoice = 'rock';
+      } else if (computerChoice === 'rock') { // 바위면
+        computerChoice = 'paper';
+      } else if (computerChoice === 'paper') { // 보자기면
+        computerChoice = 'scissors';
       }
-      if (me >= 3) {
-        $score.textContent = `🎉 나의 승리 ${me}:${computer}`;
-      } else if (computer >= 3) {
-        $score.textContent = `😔 컴퓨터의 승리 ${me}:${computer}`;
-      } else {
-        $score.textContent = `${message} 나의 점수:${me}, 컴퓨터의 점수:${computer}`
-        setTimeout(() => {
-        clickable = true;
-        intervalId = setInterval(changeComputerHand, 50);
-        }, 1000);
-      }
+      $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+      $computer.style.backgroundSize = 'auto 200px';
     }
-  }; 
-  $rock.addEventListener('click', clickButton);
-  $scissors.addEventListener('click', clickButton);
-  $paper.addEventListener('click', clickButton);
-</script>
+    let intervalId = setInterval(changeComputerHand, 50);
+
+    // 가위: 1,  바위: 0,   보: -1
+    // 나\컴퓨터  가위    바위       보
+    // 가위       0       1       2
+    // 바위      -1       0       1
+    // 보        -2      -1      0
+    const scoreTable = {
+      rock: 0,
+      scissors: 1,
+      paper: -1,
+    };
+
+    let clickable = true; // 버그해결 3번째 방법. 플래그 변수 사용하기
+    let computer = 0;
+    let me = 0;
+    const clickButton = (event) => {
+      if (clickable) {
+        clearInterval(intervalId);
+        clickable = false;
+        // 점수 계산 및 화면 표시
+        const myChoice = event.target.textContent === '바위'
+          ? 'rock'
+          : event.target.textContent === '가위'
+            ? 'scissors'
+            : 'paper';
+        const myScore = scoreTable[myChoice];
+        const computerScore = scoreTable[computerChoice];
+        const diff = myScore - computerScore;
+
+        let message;
+        // 2, -1은 승리조건이고, -2, 1은 패배조건, 위 점수표 참고
+        if ([2, -1].includes(diff)) {
+          me += 1;
+          message = '승리';
+        } else if ([-2, 1].includes(diff)) {
+          computer += 1;
+          message = '패배';
+        } else {
+          message = '무승부';
+        }
+        if (me >= 3) {
+          $score.textContent = `🎉 나의 승리 ${me}:${computer}`;
+        } else if (computer >= 3) {
+          $score.textContent = `😔 컴퓨터의 승리 ${me}:${computer}`;
+        } else {
+          $score.textContent = `${message} 나의 점수:${me}, 컴퓨터의 점수:${computer}`
+          setTimeout(() => {
+            clickable = true;
+            intervalId = setInterval(changeComputerHand, 50);
+          }, 1000);
+        }
+      }
+    };
+    $rock.addEventListener('click', clickButton);
+    $scissors.addEventListener('click', clickButton);
+    $paper.addEventListener('click', clickButton);
+  </script>
 </body>
+
 </html>

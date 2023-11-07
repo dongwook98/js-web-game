@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -64,6 +65,7 @@
     }
   </style>
 </head>
+
 <body>
   <h1 style="text-align: center;">업그레이드 계산기</h1>
   <h2 style="text-align: center;">연이어서 계산할 수 있는 기능을 추가한 계산기입니다.(ex. 1 + 2 + 4 + ... )</h2>
@@ -100,110 +102,111 @@
       </div>
     </div>
   </div>
-<script>
-  let numOne = ''; 
-  let operator = ''; 
-  let numTwo = ''; 
-  const $operator = document.querySelector('#operator');
-  const $result = document.querySelector('#result');
+  <script>
+    let numOne = '';
+    let operator = '';
+    let numTwo = '';
+    const $operator = document.querySelector('#operator');
+    const $result = document.querySelector('#result');
 
-  const onClickNumber = (event) => {
-    if (!operator) { 
-      numOne += event.target.textContent;
-      $result.value += event.target.textContent;
-      return;
-    }
-      // 아래 코드는 연산자가 있는 경우에만 실행된다.
-    if (!numTwo) {
-      $result.value = '';
-    }
-    numTwo += event.target.textContent;
-    $result.value += event.target.textContent;
-  }
-  
-  document.querySelector('#num-0').addEventListener('click', onClickNumber);
-  document.querySelector('#num-1').addEventListener('click', onClickNumber);
-  document.querySelector('#num-2').addEventListener('click', onClickNumber);
-  document.querySelector('#num-3').addEventListener('click', onClickNumber);
-  document.querySelector('#num-4').addEventListener('click', onClickNumber);
-  document.querySelector('#num-5').addEventListener('click', onClickNumber);
-  document.querySelector('#num-6').addEventListener('click', onClickNumber);
-  document.querySelector('#num-7').addEventListener('click', onClickNumber);
-  document.querySelector('#num-8').addEventListener('click', onClickNumber);
-  document.querySelector('#num-9').addEventListener('click', onClickNumber);
-
-  const onClickOperator = (op) => () => {
-    // 숫자1의 음수표현 가능하게해주는 코드
-    if (op === '-' && !numOne) {
-      numOne += op;
-      $result.value += op;
-      return;
-    } 
-
-    if (numTwo) {
-      switch (operator) {
-        case '+':
-          $result.value = parseInt(numOne) + parseInt(numTwo);
-          break;
-        case '-':
-          $result.value = numOne - numTwo;
-          break;
-        case '*':
-          $result.value = numOne - numTwo;
-          break;
-        case '/':
-          $result.value = numOne - numTwo;
-          break;
-        default:
-          break;
+    const onClickNumber = (event) => {
+      if (!operator) {
+        numOne += event.target.textContent;
+        $result.value += event.target.textContent;
+        return;
       }
-      // 연이어 계산하기 기능 추가(ex. 1 + 2 + 3 가 되게끔)
-      numOne = $result.value; // 이전에 계산했던 결과값을 넘버원에 저장
+      // 아래 코드는 연산자가 있는 경우에만 실행된다.
+      if (!numTwo) {
+        $result.value = '';
+      }
+      numTwo += event.target.textContent;
+      $result.value += event.target.textContent;
+    }
+
+    document.querySelector('#num-0').addEventListener('click', onClickNumber);
+    document.querySelector('#num-1').addEventListener('click', onClickNumber);
+    document.querySelector('#num-2').addEventListener('click', onClickNumber);
+    document.querySelector('#num-3').addEventListener('click', onClickNumber);
+    document.querySelector('#num-4').addEventListener('click', onClickNumber);
+    document.querySelector('#num-5').addEventListener('click', onClickNumber);
+    document.querySelector('#num-6').addEventListener('click', onClickNumber);
+    document.querySelector('#num-7').addEventListener('click', onClickNumber);
+    document.querySelector('#num-8').addEventListener('click', onClickNumber);
+    document.querySelector('#num-9').addEventListener('click', onClickNumber);
+
+    const onClickOperator = (op) => () => {
+      // 숫자1의 음수표현 가능하게해주는 코드
+      if (op === '-' && !numOne) {
+        numOne += op;
+        $result.value += op;
+        return;
+      }
+
+      if (numTwo) {
+        switch (operator) {
+          case '+':
+            $result.value = parseInt(numOne) + parseInt(numTwo);
+            break;
+          case '-':
+            $result.value = numOne - numTwo;
+            break;
+          case '*':
+            $result.value = numOne - numTwo;
+            break;
+          case '/':
+            $result.value = numOne - numTwo;
+            break;
+          default:
+            break;
+        }
+        // 연이어 계산하기 기능 추가(ex. 1 + 2 + 3 가 되게끔)
+        numOne = $result.value; // 이전에 계산했던 결과값을 넘버원에 저장
+        numTwo = ''; // 이전에 numTwo에 들어있던 값 초기화
+      }
+
+      if (numOne) {
+        operator = op;
+        $operator.value = operator;
+      } else {
+        alert('숫자를 먼저 입력하세요.');
+      }
+    };
+
+    document.querySelector('#plus').addEventListener('click', onClickOperator('+'));
+    document.querySelector('#minus').addEventListener('click', onClickOperator('-'));
+    document.querySelector('#divide').addEventListener('click', onClickOperator('/'));
+    document.querySelector('#multiply').addEventListener('click', onClickOperator('*'));
+
+    document.querySelector('#calculate').addEventListener('click', () => {
+      if (!numTwo) {
+        alert('숫자를 먼저 입력하세요.');
+        return;
+      }
+      // 아래로 numTwo가 있을경우에만 실행
+      if (operator === '+') {
+        $result.value = parseInt(numOne) + parseInt(numTwo);
+      } else if (operator === '-') {
+        $result.value = numOne - numTwo;
+      } else if (operator === '*') {
+        $result.value = numOne * numTwo;
+      } else if (operator === '/') {
+        $result.value = numOne / numTwo;
+      }
+      // 연이어 계산하기 기능 (ex. 1 + 2 = 3 + 4 = 7가 되게)
+      $operator.value = ''; // 화면에 연산자 표시하는거 초기화
+      numOne = $result.value; // 이전에 계산했던 결과값을 숫자 1에 저장
+      operator = ''; // 이전에 operator에 들어있던 값 초기화
       numTwo = ''; // 이전에 numTwo에 들어있던 값 초기화
-    }
+    });
 
-    if (numOne) {
-      operator = op;
-      $operator.value = operator;
-    } else {
-      alert('숫자를 먼저 입력하세요.');
-    }
-  };
-
-  document.querySelector('#plus').addEventListener('click', onClickOperator('+'));
-  document.querySelector('#minus').addEventListener('click', onClickOperator('-'));
-  document.querySelector('#divide').addEventListener('click', onClickOperator('/'));
-  document.querySelector('#multiply').addEventListener('click', onClickOperator('*'));
-
-  document.querySelector('#calculate').addEventListener('click', () => {
-    if (!numTwo) {
-      alert('숫자를 먼저 입력하세요.');
-      return;
-    } 
-    // 아래로 numTwo가 있을경우에만 실행
-    if (operator === '+') {
-      $result.value = parseInt(numOne) + parseInt(numTwo);
-    } else if (operator === '-') {
-      $result.value = numOne - numTwo;
-    } else if (operator === '*') {
-      $result.value = numOne * numTwo;
-    } else if (operator === '/') {
-      $result.value = numOne / numTwo;
-    }
-    // 연이어 계산하기 기능 (ex. 1 + 2 = 3 + 4 = 7가 되게)
-    $operator.value = ''; // 화면에 연산자 표시하는거 초기화
-    numOne = $result.value; // 이전에 계산했던 결과값을 숫자 1에 저장
-    operator = ''; // 이전에 operator에 들어있던 값 초기화
-    numTwo = ''; // 이전에 numTwo에 들어있던 값 초기화
-  });
-
-  document.querySelector('#clear').addEventListener('click', () => {
-    numOne = '';
-    operator = '';
-    numTwo = '';
-    $operator.value = '';
-    $result.value = '';
-  });
-</script>
+    document.querySelector('#clear').addEventListener('click', () => {
+      numOne = '';
+      operator = '';
+      numTwo = '';
+      $operator.value = '';
+      $result.value = '';
+    });
+  </script>
 </body>
+
 </html>

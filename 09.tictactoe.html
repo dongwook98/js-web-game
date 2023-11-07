@@ -1,124 +1,130 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>틱택토</title>
   <style>
-  h1 {
-    text-align: center;
-  }
-  table {
-    margin: 0 auto;
-    width: 500px;
-    height: 500px;
-    border-collapse: collapse;
-  }
-  td {
-    font-size: 3rem;
-    border: 1px solid black;
-    width: 166.333px;
-    height: 166.333px;
-    text-align: center;
-  }
-  div {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 4rem;
-  }
+    h1 {
+      text-align: center;
+    }
+
+    table {
+      margin: 0 auto;
+      width: 500px;
+      height: 500px;
+      border-collapse: collapse;
+    }
+
+    td {
+      font-size: 3rem;
+      border: 1px solid black;
+      width: 166.333px;
+      height: 166.333px;
+      text-align: center;
+    }
+
+    div {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 4rem;
+    }
   </style>
 </head>
+
 <body>
   <h1>틱택토 게임</h1>
-<script>
-  const { body } = document; // 구조분해할당
-  const $table = document.createElement('table');
-  const $result = document.createElement('div');
-  const rows = [];
-  let turn = 'O';
+  <script>
+    const { body } = document; // 구조분해할당
+    const $table = document.createElement('table');
+    const $result = document.createElement('div');
+    const rows = [];
+    let turn = 'O';
 
-  // [
-  //   [$td, $td, $td],
-  //   [$td, $td, $td],
-  //   [$td, $td, $td],
-  // ]
+    // [
+    //   [$td, $td, $td],
+    //   [$td, $td, $td],
+    //   [$td, $td, $td],
+    // ]
 
-  const checkWinner = (target) => {
-    const rowIndex = target.parentNode.rowIndex; // tr태그는 rowIndex를 자체적으로 가지고있음
-    const cellIndex = target.cellIndex; // td태그는 cellIndex를 자체적으로 가지고있음
-    
-    let hasWinner = false; // 세칸 다 채워졌나?
-    // 가로줄 검사
-    if (
-      rows[rowIndex][0].textContent === turn &&
-      rows[rowIndex][1].textContent === turn &&
-      rows[rowIndex][2].textContent === turn
-    ) {
-      hasWinner = true;
-    }
-    // 세로줄 검사
-    if (
-      rows[0][cellIndex].textContent === turn &&
-      rows[1][cellIndex].textContent === turn &&
-      rows[2][cellIndex].textContent === turn
-    ) {
-      hasWinner = true;
-    }
-    // 대각선 검사
-    if (
-      rows[0][0].textContent === turn &&
-      rows[1][1].textContent === turn &&
-      rows[2][2].textContent === turn
-    ) {
-      hasWinner = true;
-    }
-    if ( 
-      rows[0][2].textContent === turn &&
-      rows[1][1].textContent === turn &&
-      rows[2][0].textContent === turn 
-    ) {
-      hasWinner = true;
-    }
-    return hasWinner;
-  }
+    const checkWinner = (target) => {
+      const rowIndex = target.parentNode.rowIndex; // tr태그는 rowIndex를 자체적으로 가지고있음
+      const cellIndex = target.cellIndex; // td태그는 cellIndex를 자체적으로 가지고있음
 
-  const callback = (event) => {
-    if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
-      return; // 칸이 이미 있는 경우 아래 코드 실행안되게 리턴!
-    } 
-    event.target.textContent = turn;
-    // 승부 판단하기
-    const hasWinner = checkWinner(event.target);
-    if (hasWinner) { // 승자가 있으면
-      $result.textContent = `🎉 ${turn}의 승리! 🎉`
-      $table.removeEventListener('click', callback);
-      return;
+      let hasWinner = false; // 세칸 다 채워졌나?
+      // 가로줄 검사
+      if (
+        rows[rowIndex][0].textContent === turn &&
+        rows[rowIndex][1].textContent === turn &&
+        rows[rowIndex][2].textContent === turn
+      ) {
+        hasWinner = true;
+      }
+      // 세로줄 검사
+      if (
+        rows[0][cellIndex].textContent === turn &&
+        rows[1][cellIndex].textContent === turn &&
+        rows[2][cellIndex].textContent === turn
+      ) {
+        hasWinner = true;
+      }
+      // 대각선 검사
+      if (
+        rows[0][0].textContent === turn &&
+        rows[1][1].textContent === turn &&
+        rows[2][2].textContent === turn
+      ) {
+        hasWinner = true;
+      }
+      if (
+        rows[0][2].textContent === turn &&
+        rows[1][1].textContent === turn &&
+        rows[2][0].textContent === turn
+      ) {
+        hasWinner = true;
+      }
+      return hasWinner;
     }
-    // 무승부 검사
-    const draw = rows.flat().every((cell) => cell.textContent);
-    if (draw) {
-      $result.textContent =`무승부`;
-      return;
-    }
-    turn = turn === 'X' ? 'O' : 'X';
-  }; // 함수 분리
-  
-  for (let i = 0 ; i < 3; i++) {
-    const $tr = document.createElement('tr');
-    const cells = []; // 데이터 3개 만들어줌 반복문 돌 때 마다 새로운 배열이 생성되는 거임 (중요)
-    for (let j = 0; j < 3; j++) {
-      const $td = document.createElement('td');
-      cells.push($td);
-      $tr.append($td);
-    }
-    rows.push(cells);
-    $table.append($tr);
-  }
 
-  $table.addEventListener('click', callback); // 이벤트 버블링 이용!
-  body.append($table);
-  body.append($result);
-</script>
+    const callback = (event) => {
+      if (event.target.textContent !== '') { // 칸이 이미 채워져 있는가?
+        return; // 칸이 이미 있는 경우 아래 코드 실행안되게 리턴!
+      }
+      event.target.textContent = turn;
+      // 승부 판단하기
+      const hasWinner = checkWinner(event.target);
+      if (hasWinner) { // 승자가 있으면
+        $result.textContent = `🎉 ${turn}의 승리! 🎉`
+        $table.removeEventListener('click', callback);
+        return;
+      }
+      // 무승부 검사
+      const draw = rows.flat().every((cell) => cell.textContent);
+      if (draw) {
+        $result.textContent = `무승부`;
+        return;
+      }
+      turn = turn === 'X' ? 'O' : 'X';
+    }; // 함수 분리
+
+    for (let i = 0; i < 3; i++) {
+      const $tr = document.createElement('tr');
+      const cells = []; // 데이터 3개 만들어줌 반복문 돌 때 마다 새로운 배열이 생성되는 거임 (중요)
+      for (let j = 0; j < 3; j++) {
+        const $td = document.createElement('td');
+        cells.push($td);
+        $tr.append($td);
+      }
+      rows.push(cells);
+      $table.append($tr);
+    }
+
+    $table.addEventListener('click', callback); // 이벤트 버블링 이용!
+    body.append($table);
+    body.append($result);
+  </script>
 </body>
+
 </html>
