@@ -24,7 +24,7 @@
     }
 
     td.flag {
-      background: red;
+      background: rgb(84, 206, 254);
     }
 
     td.question {
@@ -89,6 +89,40 @@
       return tableData;
     }
 
+    function countMine(rowIndex, cellIndex) {
+      const mines = [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE];
+      let mineCount = 0;
+      mines.includes(tableData[rowIndex - 1]?.[cellIndex - 1]) && mineCount++;
+      mines.includes(tableData[rowIndex - 1]?.[cellIndex]) && mineCount++;
+      mines.includes(tableData[rowIndex - 1]?.[cellIndex + 1]) && mineCount++;
+      mines.includes(tableData[rowIndex][cellIndex - 1]) && mineCount++;
+      mines.includes(tableData[rowIndex][cellIndex + 1]) && mineCount++;
+      mines.includes(tableData[rowIndex + 1]?.[cellIndex - 1]) && mineCount++;
+      mines.includes(tableData[rowIndex + 1]?.[cellIndex]) && mineCount++;
+      mines.includes(tableData[rowIndex + 1]?.[cellIndex + 1]) && mineCount++;
+      return mineCount;
+    }
+    function onLeftClick(e) {
+      const target = e.target;
+      const rowIndex = target.parentNode.rowIndex;
+      const cellIndex = target.cellIndex;
+      const clikedCellData = tableData[rowIndex][cellIndex];
+      console.log(clikedCellData);
+      if (clikedCellData === CODE.FLAG || clikedCellData === CODE.QUESTION) {
+        console.log('click')
+        return;
+      }
+      if (clikedCellData === CODE.FLAG_MINE || clikedCellData === CODE.QUESTION_MINE || clikedCellData === CODE.MINE) {
+        alert('펑!');
+        return;
+      }
+      if (clikedCellData === CODE.NORMAL) {
+        const mineCount = countMine(rowIndex, cellIndex);
+        target.textContent = mineCount || '';
+        target.className = 'opened';
+        tableData[rowIndex][cellIndex] = mineCount;
+      }
+    }
     function onRightClick(e) {
       e.preventDefault();
       const target = e.target;
@@ -98,7 +132,7 @@
       if (cellData === CODE.MINE) {
         tableData[rowIndex][cellIndex] = CODE.QUESTION_MINE; // 물음표 지뢰로
         target.className = 'question';
-        target.textContent = '?';
+        target.textContent = '❓';
       } else if (cellData === CODE.QUESTION_MINE) {
         tableData[rowIndex][cellIndex] = CODE.FLAG_MINE;
         target.className = 'flag';
@@ -110,7 +144,7 @@
       } else if (cellData === CODE.NORMAL) {
         tableData[rowIndex][cellIndex] = CODE.QUESTION;
         target.className = 'question';
-        target.textContent = '?'
+        target.textContent = '❓'
       } else if (cellData === CODE.QUESTION) {
         tableData[rowIndex][cellIndex] = CODE.FLAG;
         target.className = 'flag';
@@ -135,6 +169,7 @@
         })
         $tbody.append($tr);
         $tbody.addEventListener('contextmenu', onRightClick);
+        $tbody.addEventListener('click', onLeftClick);
       })
     }
     drawTable();
