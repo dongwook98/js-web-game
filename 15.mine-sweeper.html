@@ -108,17 +108,18 @@
       const cellIndex = target.cellIndex;
       const clikedCellData = tableData[rowIndex][cellIndex];
       console.log(clikedCellData);
-      if (clikedCellData === CODE.FLAG || clikedCellData === CODE.QUESTION) {
-        console.log('click')
-        return;
-      }
-      if (clikedCellData === CODE.FLAG_MINE || clikedCellData === CODE.QUESTION_MINE || clikedCellData === CODE.MINE) {
-        alert('펑!');
-        return;
+      if (clikedCellData === CODE.MINE) {
+        target.textContent = '💣';
+        target.className = 'opened';
+        setTimeout(() => {
+          alert('패배! 새로고침하여 다시 시작해주세요.')
+        }, 50);
+        $tbody.removeEventListener('contextmenu', onRightClick);
+        $tbody.removeEventListener('click', onLeftClick);
       }
       if (clikedCellData === CODE.NORMAL) {
         const mineCount = countMine(rowIndex, cellIndex);
-        target.textContent = mineCount || '';
+        target.textContent = mineCount ?? '';
         target.className = 'opened';
         tableData[rowIndex][cellIndex] = mineCount;
       }
