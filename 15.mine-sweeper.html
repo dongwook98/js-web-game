@@ -10,9 +10,30 @@
       margin: 0 auto;
     }
 
-    #timer {
-      text-align: center;
+    form {
+      /* margin: 0 auto; */
+      display: flex;
+      justify-content: center;
+    }
+
+    form>input {
       font-size: 2rem;
+      width: 100px;
+      padding: 10px;
+      margin-left: 5px;
+    }
+
+    form>button {
+      font-size: 2rem;
+      width: 100px;
+      padding: 10px;
+      margin-left: 5px;
+    }
+
+    #timer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 3rem;
     }
 
     td {
@@ -71,7 +92,7 @@
     let openCount;
     let startTime;
     let interval;
-    const dev = true; // 개발모드 관리 변수
+    const dev = false; // 개발모드 관리 변수
 
     function onSubmit(e) {
       e.preventDefault();
@@ -224,6 +245,7 @@
       } else if (clickedCellData === CODE.FLAG_MINE) { // 깃발 지뢰를 우클릭하면
         tableData[rowIndex][cellIndex] = CODE.MINE; // 지뢰로
         target.className = '';
+        target.textContent = '';
         dev && (target.textContent = 'X');
       } else if (clickedCellData === CODE.NORMAL) { // 지뢰X를 우클릭하면
         tableData[rowIndex][cellIndex] = CODE.QUESTION; // 물음표로
