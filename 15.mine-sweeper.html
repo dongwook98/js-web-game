@@ -45,11 +45,11 @@
     const cell = 10;
     const mine = 10;
     const CODE = {
-      NORMAL: -1,
+      NORMAL: -1, // 뒤집힌칸(지뢰x)
       QUESTION: -2,
       FLAG: -3,
-      QUESTION_MINE: -4,
-      FLAG_MINE: -5,
+      QUESTION_MINE: -4, // ?해놨는데 지뢰인칸
+      FLAG_MINE: -5, // 깃발해놨는데 지뢰인칸
       MINE: -6,
       OPENED: 0, // 0 이상이면 모두 열린 칸   
     }
@@ -89,6 +89,39 @@
       return tableData;
     }
 
+    function onRightClick(e) {
+      e.preventDefault();
+      const target = e.target;
+      const rowIndex = target.parentNode.rowIndex;
+      const cellIndex = target.cellIndex;
+      let cellData = tableData[rowIndex][cellIndex];
+      if (cellData === CODE.MINE) {
+        tableData[rowIndex][cellIndex] = CODE.QUESTION_MINE; // 물음표 지뢰로
+        target.className = 'question';
+        target.textContent = '?';
+      } else if (cellData === CODE.QUESTION_MINE) {
+        tableData[rowIndex][cellIndex] = CODE.FLAG_MINE;
+        target.className = 'flag';
+        target.textContent = '⛳️';
+      } else if (cellData === CODE.FLAG_MINE) {
+        tableData[rowIndex][cellIndex] = CODE.MINE;
+        target.className = '';
+        target.textContent = 'X';
+      } else if (cellData === CODE.NORMAL) {
+        tableData[rowIndex][cellIndex] = CODE.QUESTION;
+        target.className = 'question';
+        target.textContent = '?'
+      } else if (cellData === CODE.QUESTION) {
+        tableData[rowIndex][cellIndex] = CODE.FLAG;
+        target.className = 'flag';
+        target.textContent = '⛳️';
+      } else if (cellData === CODE.FLAG) {
+        tableData[rowIndex][cellIndex] = CODE.NORMAL;
+        target.className = '';
+        target.textContent = '';
+      }
+    }
+
     function drawTable() { // 표 그리기
       tableData = plantMine();
       tableData.forEach((row) => {
@@ -97,10 +130,11 @@
           const $td = document.createElement('td');
           $tr.append($td);
           if (cell === CODE.MINE) {
-            $td.textContent = 'X';
+            $td.textContent = 'X'; // 개발 편의 위해 잠시
           }
         })
         $tbody.append($tr);
+        $tbody.addEventListener('contextmenu', onRightClick);
       })
     }
     drawTable();
