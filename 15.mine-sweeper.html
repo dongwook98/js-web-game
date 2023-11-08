@@ -119,7 +119,7 @@
     $form.addEventListener('submit', onSubmit);
 
     // 랜덤하게 지뢰인덱스 n개뽑아서 tableData에 넣고 tableData 리턴하는 함수
-    function plantMine() { // 지뢰 심기
+    function plantMine() {
       // 지뢰 인덱스 후보들 배열만들기
       const mineIndexCandidates = Array(row * cell).fill().map((cell, i) => i); // [0,1,2,...,99]
       const minesIndex = [];
@@ -131,7 +131,7 @@
         minesIndex.push(mineChosen);
       }
 
-      // table의 data만들기 [[...], [...], [...], [], ...] 2차원배열 구조
+      // tableData만들기 [[-1, -1, -1, ...], [...], [...], ...] 2차원배열 구조
       const tableData = [];
       for (let i = 0; i < row; i++) {
         const rowData = [];
@@ -141,10 +141,10 @@
         }
       }
 
-      // [16, 57, 65, ...] 라면 
+      // minesIndex = [16, 57, 65, ...] cell = 10, row = 10
       for (let k = 0; k < minesIndex.length; k++) {
-        const verIndex = Math.floor(minesIndex[k] / cell); // 16이라면 가로인덱스 1
-        const horIndex = minesIndex[k] % cell; // 16이라면 세로인덱스 6
+        const verIndex = Math.floor(minesIndex[k] / cell); // 16이라면 수평인덱스 1
+        const horIndex = minesIndex[k] % cell; // 16이라면 수직인덱스 6
         tableData[verIndex][horIndex] = CODE.MINE; // 지뢰인덱스 위치에 지뢰데이터(-6) 표시
       }
       return tableData;
