@@ -166,10 +166,10 @@
     }
 
     function open(rowIndex, cellIndex) {
-      // 한 번 열었던 칸 다시 열지않게 return(openAround 무한 반복 해결)
+      // 한 번 열었던 칸 다시 열지않게 종료(openAround 무한 반복 해결)
       if (tableData[rowIndex]?.[cellIndex] >= CODE.OPENED) return;
       const target = $tbody.children[rowIndex]?.children[cellIndex];
-      // [-1, -1] 막기
+      // [-1, -1]같은거 막기
       if (!target) return;
       const mineNumber = countMine(rowIndex, cellIndex);
       target.textContent = mineNumber ?? '';
@@ -229,6 +229,17 @@
       }
     }
 
+    function showMines() {
+      const mines = [CODE.FLAG_MINE, CODE.MINE, CODE.QUESTION_MINE];
+      tableData.forEach((row, rowIndex) => {
+        row.forEach((cell, cellIndex) => {
+          if (mines.includes(cell)) {
+            $tbody.children[rowIndex].children[cellIndex].textContent = '💣';
+          }
+        })
+      })
+    }
+
     let firstClick = true;
     function onLeftClick(e) {
       const target = e.target;
@@ -255,8 +266,8 @@
       // 클릭한게 지뢰 일 때
       if (clickedCellData === CODE.MINE) {
         target.textContent = '💣';
-        target.className = 'opened';
         clearInterval(interval);
+        showMines();
         setTimeout(() => {
           alert('패배! 다시 도전해보세요.');
         }, 50);
